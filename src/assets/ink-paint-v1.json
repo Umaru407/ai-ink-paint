@@ -1,0 +1,399 @@
+{
+    "1": {
+      "inputs": {
+        "text": "滚滚32長江東逝水浪花淘盡英雄"
+      },
+      "class_type": "CR Text",
+      "_meta": {
+        "title": "🔤 CR Text"
+      }
+    },
+    "2": {
+      "inputs": {
+        "text": ".\n---\n把上面的文字翻译成英文，只输出翻译结果，不要输出其他内容。"
+      },
+      "class_type": "CR Text",
+      "_meta": {
+        "title": "🔤 CR Text"
+      }
+    },
+    "3": {
+      "inputs": {
+        "text_1": [
+          "1",
+          0
+        ],
+        "text_2": [
+          "2",
+          0
+        ]
+      },
+      "class_type": "ConcatText_Zho",
+      "_meta": {
+        "title": "✨ConcatText_Zho"
+      }
+    },
+    "4": {
+      "inputs": {
+        "prompt": [
+          "3",
+          0
+        ],
+        "debug": "enable",
+        "url": "http://127.0.0.1:11434",
+        "model": [
+          "59",
+          0
+        ],
+        "keep_alive": 7,
+        "format": [
+          "55",
+          0
+        ]
+      },
+      "class_type": "OllamaGenerate",
+      "_meta": {
+        "title": "Ollama Generate"
+      }
+    },
+    "5": {
+      "inputs": {
+        "text": [
+          "4",
+          0
+        ],
+        "DisplayText_Zho_0": "Rolling waters eastward flow, waves wash away heroes."
+      },
+      "class_type": "DisplayText_Zho",
+      "_meta": {
+        "title": "✨DisplayText_Zho"
+      }
+    },
+    "7": {
+      "inputs": {
+        "text": "----\n\nPlease create an image generation prompt in English less than 46 words to fit the brief above, operate step by step:\n\nStep 1: If there are no characters in the brief, skip this step. \nList the names and genders of all the characters in the result of Step 1. \n\nStep 2: If there are no characters in the brief, skip this step. \nUse a short phrase to describe the result of Step 1. This phrase can use plurals or and, do not use any punctuation. Do not use any punctuation in this short phrase. The format is as follows:\nonly one person:\n- 1boy\n- 1girl\ntwo persons:\n- 2boys\n- 2girls\n- 1girl and 1boy\nthree or more persons:\n...\n\nStep 3: Keep the key information of the brief above, add more detail and nuance to the prompt. \n\nFormat: three-part bracket \n{[result of Step 2(if there is no explicit subject, remove this part)], [detailed features and actions of each subject from left to right, top to bottom(if there is no explicit subject, remove this part)], [scene, atmosphere, etc.]}\n\nexamples：\none person:\n- {[1girl], [souryuu asuka langley from neon genesis evangelion, rebuild of evangelion], lance of longinus, cat hat, plugsuit, pilot suit, red bodysuit, sitting, crossed legs, black eye patch, throne, looking down, from bottom, looking at viewer, outdoors, (masterpiece), (best quality), (ultra-detailed), very aesthetic, disheveled hair, perfect composition, moist skin, intricate details]}\ntwo persons:\n- {[1boy and 1girl], [Chun-Li from Street Fighter and Spider-Man from Marvel movies], [engaged in a fierce battle, dynamic fighting poses, action movie poster]}\n- {[1boy and 1girl], [K-pop male singer (left of center) with short black hair, brown eyes, white color, formal suit with satin lapel and bow tie, halfbody shot, K-pop female singer (center) with long straight black hair, dark brown eyes], [white color, formal silver dress, halfbody shot], both singers holding hands up in peace signs, bright colors, sunny background]}\nnon-human subject:\n- {[1cat], [sitting on a stone floor, looking down with a frowning expression, yellow eyes, white coat with grey markings around its face, slightly open mouth as if meowing or purring], [stone floor as the background, neutral lighting, simple composition, textured background, humorous and endearing tone]}\none person and one non-human subject:\n- {[1boy and 1cat], [boy with short bl ack hair and brown eyes, cat sitting on a stone floor, looking down with a frowning expression, yellow eyes, white coat with grey markings around its face, slightly open mouth as if meowing or purring], [stone floor as the background, neutral lighting, simple composition, textured background, humorous and endearing tone]}\nno explicit subject:\n- {[Mighty water plunges, glistening jewels in sunlight. Surrounding greenery frames nature's spectacle. Sound roars, a symphony of life. Paint the power, beauty, and serenity of this breathtaking scene]}\n\n"
+      },
+      "class_type": "CR Text",
+      "_meta": {
+        "title": "🔤 CR Text"
+      }
+    },
+    "8": {
+      "inputs": {
+        "text_1": [
+          "5",
+          0
+        ],
+        "text_2": [
+          "7",
+          0
+        ]
+      },
+      "class_type": "ConcatText_Zho",
+      "_meta": {
+        "title": "✨ConcatText_Zho"
+      }
+    },
+    "11": {
+      "inputs": {
+        "text": [
+          "24",
+          0
+        ],
+        "DisplayText_Zho_1": "Here is the result:\n\nStep 1: \nList the names and genders of all the characters:\nNo explicit subject or character.\n\nStep 2: (skipped)\nSince there are no characters in the brief.\n\nStep 3: Keep the key information, add more detail and nuance to the prompt.\n{[ heroes], [rolling waves with foamy tops, eastward flow, ocean spray on a rocky coastline, worn stone statues of ancient warriors, sea-swept hair of forgotten heroes, mysterious fog rolling in from the distance, glistening jewels in sunlight. Surrounding greenery frames nature's spectacle. Sound roars, a symphony of life. Paint the power, beauty, and serenity of this breathtaking scene], [dramatic landscape with rugged coastline, ominous clouds gathering, waves crashing against rocks, sense of melancholy and longing]}\n\nNote: I added more detail to the prompt by incorporating elements from the given text, such as the rolling waters, eastward flow, and worn stone statues. I also introduced a sense of drama and atmosphere to create a captivating scene."
+      },
+      "class_type": "DisplayText_Zho",
+      "_meta": {
+        "title": "✨DisplayText_Zho"
+      }
+    },
+    "12": {
+      "inputs": {
+        "ckpt_name": "turbovisionxlSuperFastXLBasedOnNew_tvxlV431Bakedvae.safetensors"
+      },
+      "class_type": "CheckpointLoaderSimple",
+      "_meta": {
+        "title": "Load Checkpoint"
+      }
+    },
+    "13": {
+      "inputs": {
+        "text": [
+          "22",
+          0
+        ],
+        "clip": [
+          "21",
+          1
+        ]
+      },
+      "class_type": "CLIPTextEncode",
+      "_meta": {
+        "title": "CLIP Text Encode (Prompt)"
+      }
+    },
+    "14": {
+      "inputs": {
+        "text": "Signature, deformed, smooth, plastic, blurry, grainy, ((hands)), ((hand))",
+        "clip": [
+          "21",
+          1
+        ]
+      },
+      "class_type": "CLIPTextEncode",
+      "_meta": {
+        "title": "CLIP Text Encode (Prompt)"
+      }
+    },
+    "15": {
+      "inputs": {
+        "seed": 102470065717667,
+        "steps": 5,
+        "cfg": 2,
+        "sampler_name": "dpmpp_sde",
+        "scheduler": "karras",
+        "denoise": 1,
+        "model": [
+          "21",
+          0
+        ],
+        "positive": [
+          "13",
+          0
+        ],
+        "negative": [
+          "14",
+          0
+        ],
+        "latent_image": [
+          "17",
+          0
+        ]
+      },
+      "class_type": "KSampler",
+      "_meta": {
+        "title": "KSampler"
+      }
+    },
+    "17": {
+      "inputs": {
+        "width": 710,
+        "height": 1344,
+        "batch_size": 4
+      },
+      "class_type": "EmptyLatentImage",
+      "_meta": {
+        "title": "Empty Latent Image"
+      }
+    },
+    "18": {
+      "inputs": {
+        "samples": [
+          "15",
+          0
+        ],
+        "vae": [
+          "12",
+          2
+        ]
+      },
+      "class_type": "VAEDecode",
+      "_meta": {
+        "title": "VAE Decode"
+      }
+    },
+    "19": {
+      "inputs": {
+        "filename_prefix": "ComfyUI",
+        "images": [
+          "18",
+          0
+        ]
+      },
+      "class_type": "SaveImage",
+      "_meta": {
+        "title": "Save Image"
+      }
+    },
+    "21": {
+      "inputs": {
+        "lora_name": "20240202-1706856411592-0008.safetensors",
+        "strength_model": 1.75,
+        "strength_clip": 1.75,
+        "model": [
+          "12",
+          0
+        ],
+        "clip": [
+          "12",
+          1
+        ]
+      },
+      "class_type": "LoraLoader",
+      "_meta": {
+        "title": "Load LoRA"
+      }
+    },
+    "22": {
+      "inputs": {
+        "text_1": [
+          "38",
+          0
+        ],
+        "text_2": [
+          "23",
+          0
+        ]
+      },
+      "class_type": "ConcatText_Zho",
+      "_meta": {
+        "title": "✨ConcatText_Zho"
+      }
+    },
+    "23": {
+      "inputs": {
+        "text": "chinkstyle, ink painting, chinese painting, beautiful ,elegant, guofeng"
+      },
+      "class_type": "CR Text",
+      "_meta": {
+        "title": "🔤 CR Text"
+      }
+    },
+    "24": {
+      "inputs": {
+        "prompt": [
+          "8",
+          0
+        ],
+        "debug": "enable",
+        "url": "http://127.0.0.1:11434",
+        "model": [
+          "59",
+          0
+        ],
+        "keep_alive": 5,
+        "format": [
+          "55",
+          0
+        ]
+      },
+      "class_type": "OllamaGenerate",
+      "_meta": {
+        "title": "Ollama Generate"
+      }
+    },
+    "32": {
+      "inputs": {
+        "filename_prefix": "ComfyUI",
+        "images": [
+          "18",
+          0
+        ]
+      },
+      "class_type": "SaveImage",
+      "_meta": {
+        "title": "Save Image"
+      }
+    },
+    "35": {
+      "inputs": {
+        "text": ".\n\n----\n\nJust output the prompt within { } from the above content, don't output anything else, such as \"Here is the image generation prompt in English\"."
+      },
+      "class_type": "CR Text",
+      "_meta": {
+        "title": "🔤 CR Text"
+      }
+    },
+    "36": {
+      "inputs": {
+        "text_1": [
+          "11",
+          0
+        ],
+        "text_2": [
+          "35",
+          0
+        ]
+      },
+      "class_type": "ConcatText_Zho",
+      "_meta": {
+        "title": "✨ConcatText_Zho"
+      }
+    },
+    "37": {
+      "inputs": {
+        "prompt": [
+          "36",
+          0
+        ],
+        "debug": "enable",
+        "url": "http://127.0.0.1:11434",
+        "model": [
+          "59",
+          0
+        ],
+        "keep_alive": 5,
+        "format": [
+          "55",
+          0
+        ]
+      },
+      "class_type": "OllamaGenerate",
+      "_meta": {
+        "title": "Ollama Generate"
+      }
+    },
+    "38": {
+      "inputs": {
+        "text": [
+          "37",
+          0
+        ],
+        "DisplayText_Zho_2": "{[ heroes], [rolling waves with foamy tops, eastward flow, ocean spray on a rocky coastline, worn stone statues of ancient warriors, sea-swept hair of forgotten heroes, mysterious fog rolling in from the distance, glistening jewels in sunlight. Surrounding greenery frames nature's spectacle. Sound roars, a symphony of life. Paint the power, beauty, and serenity of this breathtaking scene], [dramatic landscape with rugged coastline, ominous clouds gathering, waves crashing against rocks, sense of melancholy and longing]}"
+      },
+      "class_type": "DisplayText_Zho",
+      "_meta": {
+        "title": "✨DisplayText_Zho"
+      }
+    },
+    "49": {
+      "inputs": {
+        "text": "----\n\nPlease create an image generation prompt in English less than 46 words to fit the brief above, operate step by step:\n\nStep 1: If there are no characters in the brief, skip this step. \nList the names and genders of all the characters in the result of Step 1. \n\nStep 2: If there are no characters in the brief, skip this step. \nUse a short phrase to describe the result of Step 1. This phrase can use plurals or and, do not use any punctuation. Do not use any punctuation in this short phrase. The format is as follows:\nonly one person:\n- 1boy\n- 1girl\ntwo persons:\n- 2boys\n- 2girls\n- 1girl and 1boy\nthree or more persons:\n...\n\nStep 3: Keep the key information of the brief above, add more detail and nuance to the prompt. \n\nFormat: three-part bracket \n{[result of Step 2(if there is no explicit subject, remove this part)], [detailed features and actions of each subject from left to right, top to bottom(if there is no explicit subject, remove this part)], [scene, atmosphere, etc.]}\n\nexamples：\none person:\n- {[1girl], [souryuu asuka langley from neon genesis evangelion, rebuild of evangelion], lance of longinus, cat hat, plugsuit, pilot suit, red bodysuit, sitting, crossed legs, black eye patch, throne, looking down, from bottom, looking at viewer, outdoors, (masterpiece), (best quality), (ultra-detailed), very aesthetic, disheveled hair, perfect composition, moist skin, intricate details]}\ntwo persons:\n- {[1boy and 1girl], [Chun-Li from Street Fighter and Spider-Man from Marvel movies], [engaged in a fierce battle, dynamic fighting poses, action movie poster]}\n- {[1boy and 1girl], [K-pop male singer (left of center) with short black hair, brown eyes, white color, formal suit with satin lapel and bow tie, halfbody shot, K-pop female singer (center) with long straight black hair, dark brown eyes], [white color, formal silver dress, halfbody shot], both singers holding hands up in peace signs, bright colors, sunny background]}\nnon-human subject:\n- {[1cat], [sitting on a stone floor, looking down with a frowning expression, yellow eyes, white coat with grey markings around its face, slightly open mouth as if meowing or purring], [stone floor as the background, neutral lighting, simple composition, textured background, humorous and endearing tone]}\none person and one non-human subject:\n- {[1boy and 1cat], [boy with short bl ack hair and brown eyes, cat sitting on a stone floor, looking down with a frowning expression, yellow eyes, white coat with grey markings around its face, slightly open mouth as if meowing or purring], [stone floor as the background, neutral lighting, simple composition, textured background, humorous and endearing tone]}\nno explicit subject:\n- {[Mighty water plunges, glistening jewels in sunlight. Surrounding greenery frames nature's spectacle. Sound roars, a symphony of life. Paint the power, beauty, and serenity of this breathtaking scene]}\n\nStep 4: Extract the content within { } in the result of step three and output it. Do not output { } and any other content."
+      },
+      "class_type": "CR Text",
+      "_meta": {
+        "title": "🔤 CR Text"
+      }
+    },
+    "52": {
+      "inputs": {
+        "format": "PNG",
+        "images": [
+          "18",
+          0
+        ]
+      },
+      "class_type": "ETN_SendImageWebSocket",
+      "_meta": {
+        "title": "Send Image (WebSocket)"
+      }
+    },
+    "55": {
+      "inputs": {
+        "text": "text"
+      },
+      "class_type": "CR Text",
+      "_meta": {
+        "title": "🔤 CR Text"
+      }
+    },
+    "59": {
+      "inputs": {
+        "text": "llama3.1:8b-instruct-q6_K"
+      },
+      "class_type": "CR Text",
+      "_meta": {
+        "title": "🔤 CR Text"
+      }
+    }
+  }
