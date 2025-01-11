@@ -23,10 +23,10 @@ import SignCanvas from '../components/SignCanvas';
 
 // pages/color-palette.tsx
 const colors = [
-    '#992b39', '#FF7F00', '#FFFF00', '#7FFF00', '#00FF00',
-    '#00FF7F', '#00FFFF', '#007FFF', '#0000FF', '#7F00FF',
-    '#FF00FF', '#FF007F', '#7F7F7F', '#BFBFBF', '#FFFFFF',
-    '#FFA07A', '#20B2AA', '#778899',
+    '#9d2933', '#f36838', '#ffb61e', '#16a951', '#1685a9', '#003472',
+    '#ff4777', '#FFA07A', '#c89b40', '#549688', '#20B2AA', '#30dff3',
+    '#8d4bbb', '#815476', '#845a33', '#778899', '#fff2df', '#E9E7EF'
+
 ];
 
 const brushSizes = [
@@ -50,16 +50,17 @@ function ColorPalette({ setSelectedColor }) {
 
 function BrushSizeSlector({ selectedColor, setBrushSize }) {
     return (
-        <div className='grid grid-cols-2 gap-4  place-items-center'>
+        <div className='grid grid-cols-2 gap-4  place-items-center' >
             {
                 brushSizes.map((size, index) => (
-                    <div key={index} className='rounded-full flex items-center justify-center' style={{ backgroundColor: selectedColor, width: `${size}px`, height: `${size}px` }}
-                        onClick={() => {
-                            console.log('size', size)
-                            setBrushSize(size)
-                        }}
+                    <div key={index} 
+                        className='border-white w-full h-full flex items-center justify-center'
                     >
-                        {size}
+                        <div className='rounded-full flex items-center justify-center' style={{ backgroundColor: selectedColor, width: `${size}px`, height: `${size}px` }}
+                            onClick={() => {
+                                console.log('size', size)
+                                setBrushSize(size)
+                            }}>{size}</div>
                     </div>
                 ))
             }
@@ -95,26 +96,28 @@ export default function Page2() {
     const [selectedColor, setSelectedColor] = useState(colors[0]);
     const [brushSize, setBrushSize] = useState(20);
     return (
-        <div className="paper-container flex flex-col h-full justify-between">
-            <div className='flex'>
-                <ImageColor setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} selectedColor={selectedColor} brushSize={brushSize} />
-                <SignCanvas setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} />
-            </div>
-
-
-            <div>
-                <h2 className='text-4xl text-center mb-2'>
-                        筆刷設定
-                </h2>
-    
-                <div className="flex justify-around">
-                    
-                    <BrushSizeSlector selectedColor={selectedColor} setBrushSize={setBrushSize} />
-                    {/* <TestFabric selectedColor={selectedColor}> </TestFabric> */}
-                    <ColorPalette setSelectedColor={setSelectedColor} />
+        <div className="paper-container flex flex-col h-full justify-between gap-8">
+           <div className='px-8 flex flex-col flex-grow'>
+                <div className='flex '>
+                    <div className='my-auto'><ImageColor setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} selectedColor={selectedColor} brushSize={brushSize} /></div>
+                    <SignCanvas setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} />
                 </div>
-            </div>
-
+    
+    
+                <div className='my-auto'>
+                    <h2 className='text-6xl text-center mb-2'>
+                        筆刷設定
+                    </h2>
+    
+                    <div className="flex justify-center gap-8">
+    
+                        <BrushSizeSlector selectedColor={selectedColor} setBrushSize={setBrushSize} />
+                        {/* <TestFabric selectedColor={selectedColor}> </TestFabric> */}
+                        <ColorPalette setSelectedColor={setSelectedColor} />
+                    </div>
+                </div>
+    
+           </div>
 
             <DoneButton />
         </div>

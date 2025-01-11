@@ -78,12 +78,14 @@ const TextRecongnizeArea = () => {
     };
 
     // console.log(`max-w-[640px]`)
+     
+    // 
 
     return (
-        <div className={`max-w-[480px]`}>
+        <div style={{width:window.innerHeight * 5 / 6 * 1 / 2.4}} className='my-auto'>
             <div
                 ref={containerRef}
-                className={`w-full overflow-hidden cursor-grab select-none ${isDragging ? 'cursor-grabbing' : ''
+                className={`w-full h-[64px] overflow-hidden cursor-grab select-none ${isDragging ? 'cursor-grabbing' : ''
                     }`}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}

@@ -9,18 +9,21 @@ import { GenerateButton } from '../components/GenerateButton';
 export default function Page1() {
 
     return (
-
+// 1024px
         <div className='flex flex-col h-full px-8 justify-between '>
-            <div className="flex min-h-0 flex-shrink">
 
+            
+            <div className="flex min-h-0 flex-shrink max-w-5xl ">  
+                
                 <div className='flex flex-col justify-between '>
                     <HandwritingCanvas />
                     <TextRecongnizeArea />
-
-                    {/* <PromptInput /> */}
                 </div>
+                
                 <ImageSelectArea />
             </div>
+
+
             <GenerateButton />
 
         </div>

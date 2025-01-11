@@ -40,8 +40,8 @@ const HandwritingCanvas = () => {
         distance: 10,
         spring: 0.3,
         friction: 0.5,
-        size: 18,
-        diff: 18 / 8
+        size: 24,
+        diff: 24 / 8
     }
 
     const canvasRef = useRef(null);
@@ -52,7 +52,7 @@ const HandwritingCanvas = () => {
     // let canvasWidth = canvasHeight * 1 / 2.5;
 
     let canvasHeight = window.innerHeight * 5 / 6
-    let canvasWidth = canvasHeight * 1 / 2.5;
+    let canvasWidth = canvasHeight * 1 / 2.4;
 
     useEffect(() => {
         // console.log('recognizeHandwriting!!!!!!!!!!!!!');

@@ -173,9 +173,18 @@ const SignCanvas = ({setSharedGraphics}) => {
                         // setRecognizeStrokes((prev) => prev.slice(0, -1)); // 函數式更新
                         // Redraw all remaining strokes
                         graphicsRef.current.clear()
+
+                        graphicsRef.current.background('red')
+                    graphicsRef.current.stroke('#ffffff')
+                    graphicsRef.current.strokeWeight(15); // 設定邊框寬度為 2 像素
+                    graphicsRef.current.noFill(); // 設定內部不填充
+
+                    // 畫一個只有白色邊框的長方形
+                    graphicsRef.current.rect(30, 30, canvasWidth - 60, canvasHeight - 60);
+
                         strokes.forEach((stroke) => {
                             ax = ay = f = 0;
-                            graphicsRef.current.drawStroke(stroke);
+                            p5InstanceRef.current.drawStroke(stroke);
                         });
                     }
                 };
@@ -268,7 +277,17 @@ const SignCanvas = ({setSharedGraphics}) => {
     const clearCanvas = () => {
         // p5SignInstance.current?.saveCanvas("myCanvas", "png");
         // p5SignInstance.current?.saveCanvasToBuffer()
+
+
         p5InstanceRef.current?.clearCanvas();
+
+        graphicsRef.current.background('red')
+                    graphicsRef.current.stroke('#ffffff')
+                    graphicsRef.current.strokeWeight(15); // 設定邊框寬度為 2 像素
+                    graphicsRef.current.noFill(); // 設定內部不填充
+
+                    // 畫一個只有白色邊框的長方形
+                    graphicsRef.current.rect(30, 30, canvasWidth - 60, canvasHeight - 60);
     };
 
 
@@ -300,16 +319,19 @@ const SignCanvas = ({setSharedGraphics}) => {
     // };
 
     return (
-        <div className="paper">
-            <div ref={canvasRef} className="canvas-container bg-white w-min" ></div>
-            <div className="canvas-controls">
-                <button onClick={clearCanvas} id='canvas-clear' className="bg-blue-500 hover:bg-blue-700 text-white text-4xl font-bold  py-2 px-4 rounded ">
-                    清除
-                </button>
-                <button onClick={undoLastStroke} id='canvas-undo' className="bg-blue-500 hover:bg-blue-700 text-4xl text-white font-bold py-2 px-4 rounded  ">
-                    回上一筆畫
-                </button>
-                <button onClick={changeEditMode} id='canvas-undo' className="bg-blue-500 hover:bg-blue-700 text-4xl text-white font-bold py-2 px-4 rounded  ">
+        <div className="paper flex flex-col justify-center items-center flex-grow">
+            <div> <h1 className='text-6xl text-center mb-4'>落款</h1>
+                <div ref={canvasRef} className="canvas-container bg-white w-min" ></div></div>
+            <div className="canvas-controls flex flex-col mt-12">
+                <div>
+                    <button onClick={clearCanvas} id='canvas-clear' className="bg-blue-500 hover:bg-blue-700 text-white text-4xl font-bold  py-2 px-4 rounded ">
+                        清除
+                    </button>
+                    <button onClick={undoLastStroke} id='canvas-undo' className="bg-blue-500 hover:bg-blue-700 text-4xl text-white font-bold py-2 px-4 rounded  ">
+                        回上一筆畫
+                    </button>
+                </div>
+                <button onClick={changeEditMode} id='canvas-undo' className="bg-blue-500 hover:bg-blue-700 text-4xl text-white font-bold py-2 px-4 rounded mt-4 ">
                     {mode ? '編輯大小OFF' : '編輯大小ON'}
                 </button>
             </div>

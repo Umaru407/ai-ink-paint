@@ -345,7 +345,10 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
 
 
     return (
-        <div id='canvas-container' >
-        </div>
-    );
+        <div>
+            <h1 className='text-6xl text-center mb-4'>上色</h1>
+            <div id='canvas-container' >
+            </div>
+        
+        </div>);
 }
