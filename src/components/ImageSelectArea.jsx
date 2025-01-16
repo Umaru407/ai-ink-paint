@@ -13,7 +13,7 @@ const ImageSelectArea = () => {
     const {p5InkInstance,inkImageData,setInkImageData} = useP5Ink()
 
     useEffect(() => {
-      setImages(['/1.png','/2.png','/3.png','/4.png'])
+      setImages(['/一隻熊貓吃竹子_3_灰階.png','一隻熊貓吃竹子_2_灰階.png','/白日依山盡黃河入海流_2_灰階.png','/白日依山盡黃河入海流_3_灰階.png','/床前明月光疑似地上霜_2_灰階.png','/床前明月光疑似地上霜_3_灰階.png'])
     
      
     }, [])
