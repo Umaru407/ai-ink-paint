@@ -12,7 +12,8 @@ import { P5InkProvider } from './contexts/p5InkContext';
 import { P5PaintProvider } from './contexts/p5PaintContext';
 import Page3 from './pages/Page3';
 import { P5SignProvider } from './contexts/p5SignContext';
-
+import Page0 from './pages/Page0';
+import { HeroUIProvider } from "@heroui/react";
 
 
 const Page = ({ position, children }) => (
@@ -61,6 +62,7 @@ const FullscreenPages = ({ pages }) => {
 
 export default function Home() {
   const pages = [
+    <Page0 />,
     <Page1 />,
     <Page2></Page2>
     , <Page3 />,
@@ -74,19 +76,23 @@ export default function Home() {
   ];
 
   return (
-    <PageProvider totalPages={pages.length}>
-      <ImageProvider>
-        <P5InkProvider>
-          <P5PaintProvider>
-            <P5SignProvider><SelectImageProvider>
-              <FullscreenPages pages={pages} />
-            </SelectImageProvider></P5SignProvider>
+    <HeroUIProvider>
 
-          </P5PaintProvider>
-        </P5InkProvider>
+      <PageProvider totalPages={pages.length}>
+        <ImageProvider>
+          <P5InkProvider>
+            <P5PaintProvider>
+              <P5SignProvider><SelectImageProvider>
+                <FullscreenPages pages={pages} />
+              </SelectImageProvider></P5SignProvider>
 
-      </ImageProvider>
-    </PageProvider>
+            </P5PaintProvider>
+          </P5InkProvider>
+
+        </ImageProvider>
+      </PageProvider>
+    </HeroUIProvider>
+
   )
 }
 
