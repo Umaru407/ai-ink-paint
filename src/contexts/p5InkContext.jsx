@@ -4,11 +4,13 @@ const P5InkContext = createContext();
 
 export const P5InkProvider = ({ children }) => {
   const p5InkInstance = useRef(null); // 儲存 p5 實例
+  const p5ColorInstance = useRef(null); // 儲存 p5 實例
   const [p5InkReady, setP5InkReady] = useState(false);
   const [inkImageData, setInkImageData] = useState(null); // 用於存儲圖片的 Base64 數據
+  const [colorImageData, setColorImageData] = useState(null); // 用於存儲圖片的 Base64 數據
 
   return (
-    <P5InkContext.Provider value={{ p5InkInstance, p5InkReady, setP5InkReady,inkImageData,setInkImageData }}>
+    <P5InkContext.Provider value={{ p5InkInstance, p5InkReady, setP5InkReady, inkImageData, setInkImageData, colorImageData, setColorImageData }}>
       {children}
     </P5InkContext.Provider>
   );

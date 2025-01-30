@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 import p5 from 'p5';
 import recognizeHandwriting from '../utils/recognizeHandwriting';
@@ -6,64 +7,47 @@ import recognizeHandwriting from '../utils/recognizeHandwriting';
 // type p5ContextType = p5 | null;
 import { useImageContext } from '../contexts/ImageContext';
 import { useP5Ink } from '../contexts/p5InkContext';
-
-// 擴展 p5 型別
-// declare module 'p5' {
-//     interface p5InstanceExtensions {
-//         clearCanvas: () => void;
-//         undoLastStroke: () => void;
-//         getMillsecondFromStrokeStart: () => number;
-//         saveStrokeStep: () => void;
-//         endDraw: (event: object) => void;
-//         drawStroke: (stroke: Stroke) => void;
-//         getRecognizeStrokes: () => Stroke[];
-//         getCanvasSize: () => object
-//         resetRecognizeStrokes:()=>void
-//     }
-// }
-
-// interface HandwritingCanvasProps {
+import { Switch } from '@heroui/react';
+import { usePageNavigation } from '../contexts/PageContext';
 
 
 
-//   }
-//  const { images, setImages, prompt, setPrompt,setRecognizeStrokes,recognizeStrokes } = useImageContext();
-// An array of Stroke objects
-
-
-
-const HandwritingCanvas = () => {
+const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
     const { recognizeStrokes, setRecognizeStrokes, buttons, setButtons } = useImageContext();
-    // let recognizeStrokes: [number[], number[], number[]][] = [];
+    const [isSelected, setIsSelected] = React.useState(true);
+    const strokeMax = 16;
+    const { currentPage, goToPage } = usePageNavigation();
+    const isOnPage = useRef(false);
+
+    useEffect(() => {
+        isOnPage.current = currentPage === 1;
+
+        if (!isOnPage.current) {
+            p5InstanceRef.current?.noLoop()
+        } else {
+            p5InstanceRef.current?.loop()
+        }
+
+    }, [currentPage]);
 
     const setting = {
         distance: 10,
         spring: 0.3,
         friction: 0.5,
-        size: 28,
-        diff: 28 / 8
+        size: strokeMax + 2,
+        diff: strokeMax + 2 / 8
     }
-
-    
     const canvasRef = useRef(null);
     const p5InstanceRef = useRef(null);
     const { p5InkInstance, setP5InkReady, setInkImageData } = useP5Ink();
 
-    // let canvasHeight = window.innerHeight * 5 / 6
-    // let canvasWidth = canvasHeight * 1 / 2.5;
-
-    let canvasHeight = window.innerHeight * 5 / 6
-    let canvasWidth = canvasHeight * 1 / 2.4;
-
     useEffect(() => {
-        // console.log('recognizeHandwriting!!!!!!!!!!!!!');
         recognizeHandwriting({
             width: canvasWidth,
             height: canvasHeight
         }, recognizeStrokes, 10, saveResult);
     }, [recognizeStrokes]); // 監測 state 的變化
 
-    // const [buttons, setButtons] = useState<string[]>([]);
 
     useEffect(() => {
         // Ensure we're only creating the p5 instance on the client side
@@ -78,28 +62,28 @@ const HandwritingCanvas = () => {
                 let x, y, ax, ay, a, r, f //: number
                 let oldR //: number;
                 let isMax = false
-                let strokeMax = 20;
+
                 /* Draw status */
                 let drawing = false;
                 let drawStartTime = undefined; // Timestamp of first interaction
 
 
                 p.setup = () => {
+                    // 創建主畫布
                     canvas = p.createCanvas(canvasWidth, canvasHeight);
                     canvas.parent(canvasRef.current);
                     x = y = ax = ay = a = r = f = 0;
+                    p.noLoop()
                 };
 
                 p.draw = () => {
-                    // This method is left empty as we'll handle drawing in mousePressed and mouseDragged
+                    // console.log('書法draw')
                     oldR = r;
                     if (p.mouseIsPressed && p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) {
                         drawing = true
-
                     }
                     if (p.mouseIsPressed && drawing) {
-                        // console.log("8888")
-                        // console.log(currentStroke)
+
                         const ms = p.getMillsecondFromStrokeStart();
                         const mX = p.mouseX;
                         const mY = p.mouseY;
@@ -123,7 +107,7 @@ const HandwritingCanvas = () => {
                             r = size - a;
 
                         } else {
-                            r = r + 2
+                            r = r + 1
                             diff = r / 8;
                             if (r >= strokeMax) {
                                 isMax = true
@@ -141,7 +125,6 @@ const HandwritingCanvas = () => {
 
                             p.strokeWeight(oldR + diff);
                             p.line(x, y, oldX, oldY);
-
                             p.strokeWeight(oldR);
                             p.line(x + diff * 2, y + diff * 2, oldX + diff * 2, oldY + diff * 2);
                             p.line(x - diff, y - diff, oldX - diff, oldY - diff);
@@ -151,6 +134,58 @@ const HandwritingCanvas = () => {
                         isMax = false
                         r = 0
                     }
+                };
+
+                p.drawStroke = (stroke) => {
+                    oldR = r;
+                    const [xPoints, yPoints, timePoints] = stroke;
+                    if (xPoints.length === 0) return;
+                    const minLength = Math.min(xPoints.length, yPoints.length, timePoints.length);
+                    // 遍歷並處理每組資料
+                    for (let i = 0; i < minLength; i++) {
+                        // console.log(`第 ${i + 1} 組: x=${xPoints[i]}, y=${yPoints[i]}, time=${timePoints[i]}`);
+                        const mX = xPoints[i];
+                        const mY = yPoints[i];
+                        if (!f) {
+                            f = 1;
+                            x = xPoints[0];
+                            y = yPoints[0];
+                        }
+                        ax += (mX - x) * spring;
+                        ay += (mY - y) * spring;
+                        ax *= friction;
+                        ay *= friction;
+                        a += p.sqrt(ax * ax + ay * ay) - a;
+                        a *= 0.6;
+
+                        if (isMax) {
+                            r = size - a;
+                        } else {
+                            r = r + 1
+                            diff = r / 8;
+                            if (r >= strokeMax) {
+                                isMax = true
+                            }
+                        }
+                        // r = size - a;
+
+                        for (let i = 0; i < distance; ++i) {
+                            const oldX = x;
+                            const oldY = y;
+                            x += ax / distance;
+                            y += ay / distance;
+                            oldR += (r - oldR) / distance;
+
+                            if (oldR < 1) oldR = 1;
+
+                            p.strokeWeight(oldR + diff);
+                            p.line(x, y, oldX, oldY);
+                            p.strokeWeight(oldR);
+                            p.line(x + diff * 2, y + diff * 2, oldX + diff * 2, oldY + diff * 2);
+                            p.line(x - diff, y - diff, oldX - diff, oldY - diff);
+                        }
+                    }
+
                 };
 
 
@@ -164,7 +199,8 @@ const HandwritingCanvas = () => {
 
                 // Clear canvas method
                 p.clearCanvas = () => {
-                    p.background(255);
+                    // p.background(255);
+                    p.clear()
                     strokes = [];
                 };
 
@@ -203,7 +239,9 @@ const HandwritingCanvas = () => {
                         // Redraw all remaining strokes
                         p.clear()
                         strokes.forEach((stroke) => {
-                            ax = ay = f = 0;
+                            x = y = ax = ay = a = r = f = 0;
+                            isMax = false
+                            // r = 0
                             p.drawStroke(stroke);
                         });
                     }
@@ -224,47 +262,7 @@ const HandwritingCanvas = () => {
                     height: canvasHeight
                 });
 
-                p.drawStroke = (stroke) => {
-                    const [xPoints, yPoints, timePoints] = stroke;
-                    if (xPoints.length === 0) return;
-                    const minLength = Math.min(xPoints.length, yPoints.length, timePoints.length);
-                    // 遍歷並處理每組資料
-                    for (let i = 0; i < minLength; i++) {
-                        // console.log(`第 ${i + 1} 組: x=${xPoints[i]}, y=${yPoints[i]}, time=${timePoints[i]}`);
-                        const mX = xPoints[i];
-                        const mY = yPoints[i];
-                        if (!f) {
-                            f = 1;
-                            x = xPoints[0];
-                            y = yPoints[0];
-                        }
-                        ax += (mX - x) * spring;
-                        ay += (mY - y) * spring;
-                        ax *= friction;
-                        ay *= friction;
-                        a += p.sqrt(ax * ax + ay * ay) - a;
-                        a *= 0.6;
-                        r = size - a;
 
-                        for (let i = 0; i < distance; ++i) {
-                            const oldX = x;
-                            const oldY = y;
-                            x += ax / distance;
-                            y += ay / distance;
-                            oldR += (r - oldR) / distance;
-
-                            if (oldR < 1) oldR = 1;
-
-                            p.strokeWeight(oldR + diff);
-                            p.line(x, y, oldX, oldY);
-
-                            p.strokeWeight(oldR);
-                            p.line(x + diff * 2, y + diff * 2, oldX + diff * 2, oldY + diff * 2);
-                            p.line(x - diff, y - diff, oldX - diff, oldY - diff);
-                        }
-                    }
-
-                };
 
                 p.getRecognizeStrokes = () => (recognizeStrokes.length ? recognizeStrokes : [[[], [], []]]);
                 p.resetRecognizeStrokes = () => {
@@ -272,12 +270,46 @@ const HandwritingCanvas = () => {
                     setRecognizeStrokes([])
                 }
                     ;
-                // 自定義方法，將畫布保存為 Base64 圖片數據
                 p.saveCanvasToBuffer = () => {
-                    const canvas = p.canvas; // 獲取 HTML Canvas 元素
-                    const dataUrl = canvas.toDataURL("image/png"); // 將畫布轉為 Base64
-                    //console.log(dataUrl,'777')
-                    setInkImageData(dataUrl); // 將 Base64 數據存入 Context
+                    const canvas = p.canvas;
+                    const img = p.get(); // 取得當前畫布影像
+                    img.loadPixels();
+
+                    let left = canvas.width;
+                    let right = 0;
+                    let top = canvas.height;
+                    let bottom = 0;
+
+                    // 掃描所有像素找出邊界
+                    for (let y = 0; y < canvas.height; y++) {
+                        for (let x = 0; x < canvas.width; x++) {
+                            const idx = (y * canvas.width + x) * 4;
+                            if (img.pixels[idx + 3] > 0) { // 檢查 alpha 通道
+                                if (x < left) left = x;
+                                if (x > right) right = x;
+                                if (y < top) top = y;
+                                if (y > bottom) bottom = y;
+                            }
+                        }
+                    }
+
+                    // 處理完全空白畫布的情況
+                    if (left > right || top > bottom) {
+                        left = top = 0;
+                        right = bottom = 1;
+                    }
+
+                    // 計算裁切範圍
+                    const width = right - left + 1;
+                    const height = bottom - top + 1;
+
+                    // 建立新畫布並複製內容
+                    const buffer = p.createGraphics(width, height);
+                    buffer.image(img, -left, -top);
+
+                    // 轉換為 Base64
+                    const dataUrl = buffer.elt.toDataURL("image/png");
+                    setInkImageData(dataUrl);
                 };
             };
 
@@ -285,18 +317,14 @@ const HandwritingCanvas = () => {
             p5InstanceRef.current = new p5(sketch);
 
             p5InkInstance.current = p5InstanceRef.current;
-            // console.log(p5inkInstance,'789')
-            // Cleanup function
             return () => {
                 p5InstanceRef.current?.remove();
             };
         }
-    }, []);
+    }, [canvasWidth]);
 
     // Method to clear canvas from outside
     const clearCanvas = () => {
-        // p5inkInstance.current?.saveCanvas("myCanvas", "png");
-        // p5inkInstance.current?.saveCanvasToBuffer()
         p5InstanceRef.current?.clearCanvas();
     };
 
@@ -318,20 +346,11 @@ const HandwritingCanvas = () => {
     // };
 
     return (
-        <div className="paper">
-            <div ref={canvasRef} className="canvas-container bg-white w-min" ></div>
-            <div className="canvas-controls">
-                <button onClick={clearCanvas} id='canvas-clear' className="bg-blue-500 hover:bg-blue-700 text-white text-4xl font-bold  py-2 px-4 rounded ">
-                    清除
-                </button>
-                <button onClick={undoLastStroke} id='canvas-undo' className="bg-blue-500 hover:bg-blue-700 text-4xl text-white font-bold py-2 px-4 rounded  ">
-                    回上一筆畫
-                </button>
-            </div>
-            {/* <TextRecongnizeArea buttonLabels = {buttons} setButtons = {setButtons} resetRecognizeStrokes = {resetRecognizeStrokes}  /> */}
-        </div>
+
+        <div ref={canvasRef} className="canvas-container absolute" ></div>
+
     );
 }
 
 
-export default HandwritingCanvas;
+export default CalligraphyPoemCanva;

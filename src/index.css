@@ -22,3 +22,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   
 }
+/* #inkWashPainting canvas {
+  transform: scale(6);
+  transform-origin: top left;
+} */

@@ -1,75 +1,86 @@
+import React, { useEffect, useRef } from 'react';
+import p5 from 'p5';
+import { usePageNavigation } from '../contexts/PageContext';
+import { useP5Paint } from '../contexts/p5PaintContext';
 import { useP5Ink } from '../contexts/p5InkContext';
-import React, { useEffect, useRef, useState } from 'react';
 import { useSelectImageContext } from '../contexts/SelectImageContext';
 
-import p5 from 'p5';
-import { useP5Paint } from '../contexts/p5PaintContext';
-
-
-export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
+const ImageColor = ({ sharedGraphics, sharedColorGraphics, editMode }) => {
+    const canvasRef = useRef(null);
+    const { currentPage, goToPage } = usePageNavigation();
+    const { p5PaintInstance, setPaintImageData } = useP5Paint()
+    const p5InstanceRef = useRef(null);
+    const isOnPage = useRef(false);
+    const edit_mode = useRef(editMode)
+    useEffect(() => {
+        edit_mode.current = editMode
+    }, [editMode])
 
     const { selectImage } = useSelectImageContext();
-    const {p5PaintInstance,setPaintImageData} = useP5Paint()
-   const {inkImageData} =  useP5Ink()
-    // const [selectedColor, setSelectedColor] = useState(colors[0]);
-    // const [brushSize, setBrushSize] = useState(20);
-    const canvasRef = useRef(null);
-    const p5Instance = useRef(null);
-
-    let strokes = []; // 用來保存所有的筆劃
-    let tempStroke = { color: selectedColor, size: brushSize, points: [] };  // 當前筆劃的暫存
-
+    // const { p5PaintInstance, setPaintImageData } = useP5Paint()
+    const { inkImageData } = useP5Ink()
 
     useEffect(() => {
-        if (!selectImage) return;
+        isOnPage.current = currentPage === 3;
 
-        if (p5Instance.current) {
-            p5Instance.current.remove();
+        if (!isOnPage.current) {
+            p5InstanceRef.current?.noLoop()
+        } else {
+            p5InstanceRef.current?.loop()
         }
 
+    }, [currentPage]);
+
+    useEffect(() => {
+
+        if (!selectImage) return;
+        // if (p5InstanceRef.current) {
+        //     p5InstanceRef.current.remove();
+        // }
+
+        // Create new p5 instance
         const sketch = (p) => {
-            let img
-            let img2;
-            // let stickyNote;
+            let bgImage;
+            let stampImage;
+            let inkImage
+
             let canvasWidth
             let canvasHeight
-            let drawingLayer
-
+            // let edit_mode.current = true
 
             let dragging = false; // Is the object being dragged?
             let resizing = false; // Is the object being resized?
             let rollover = false; // Is the mouse over the object?
-            let editMode = false; // Is the object in edit mode?
+            // let edit_mode.current = true; // Is the object in edit mode?
 
             let x, y, w, h; // Location and size
+            let editSize = { x: 0, y: 0, w: 0, h: 0 }
             let offsetX, offsetY; // Mouseclick offset
             let aspectRatio; // Aspect ratio of the image
 
-            let handleSize = 10; // Size of resize handle
+            let handleSize = 20; // Size of resize handle
 
-            p.changeEditMode = (mode)=>{
-                editMode = mode
-            }
+            let scale = 6;
 
-            p.changeColor = (color) => {    // 更改當前筆劃的顏色       
-                tempStroke.color = color;
-            }
-            p.changeSize = (size)=>{
-                tempStroke.size = size
-            }
-
+            // p.changeedit_mode.current = (mode) => {
+            //     edit_mode.current = mode
+            //     console.log(edit_mode.current, 'edit_mode.current')
+            // }
 
             p.preload = () => {
-                img = p.loadImage(selectImage);
-                img2 = p.loadImage(inkImageData);
+                bgImage = p.loadImage(selectImage);
+                inkImage = p.loadImage(inkImageData);
+                // stampImage = p.loadImage(inkImageData);
             };
 
             const calculateCanvasSize = () => {
                 const windowHeight = window.innerHeight * 4 / 6;
-                const aspectRatio = img.width / img.height;
+                const aspectRatio = bgImage.width / bgImage.height;
                 canvasHeight = windowHeight;
                 canvasWidth = windowHeight * aspectRatio;
             };
+
+
 
             p.setup = () => {
 
@@ -78,44 +89,33 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
                 y = 100;
 
                 // Dimensions
-                w = 200;
-                h = 500;
+                w = inkImage.width / scale
+                h = inkImage.height / scale
+                // x - sharedGraphics.width / scale, y, w + sharedGraphics.width / scale, sharedGraphics.height / scale + sharedGraphics.height / scale / 2
+                // editSize.x = x - sharedGraphics.width / scale;
+                // editSize.y = y;
+                // editSize.w =
                 // Calculate initial aspect ratio
                 aspectRatio = w / h;
-
-
-                const container = document.getElementById('canvas-container');
-                const canvas = p.createCanvas(img.width, img.height);
-                if (container) {
-                    canvas.parent(container);
-                }
-
-                // 初始化繪圖圖層
                 calculateCanvasSize();
-                p.resizeCanvas(canvasWidth, canvasHeight);
-                drawingLayer = p.createGraphics(canvasWidth, canvasHeight);
-                p.drawingLayer = drawingLayer
-                drawingLayer.clear();  // 確保繪圖圖層一開始是透明的
-                // drawingLayer.filter(p.BLUR, 3);
-                drawingLayer.drawingContext.filter = 'blur(6px)';
-                // 設置繪圖圖層的基本屬性
-                drawingLayer.stroke(selectedColor);
-                drawingLayer.strokeWeight(brushSize);
-                drawingLayer.noFill();
-            };
-
-            p.windowResized = () => {
-                // 重新計算尺寸
-                calculateCanvasSize();
-                p.resizeCanvas(canvasWidth, canvasHeight);
+                const canvas = p.createCanvas(canvasWidth, canvasHeight);
+                canvas.parent(canvasRef.current);
+                // p.image(sharedColorGraphics, 0, 0, canvasWidth, canvasHeight);
+                //初始化繪圖圖層
+                // calculateCanvasSize();
+                // p.resizeCanvas(canvasWidth, canvasHeight);
+                // p.image(bgImage, 0, 0, canvasWidth, canvasHeight);
 
             };
 
             p.draw = () => {
-                // 清除主畫布
-                p.clear();
-                p.image(img, 0, 0, canvasWidth, canvasHeight);
-
+                // console.log(edit_mode.current)
+                p.clear()
+                p.image(bgImage, 0, 0, canvasWidth, canvasHeight);
+                // console.log(sharedColorGraphics)
+                p.blendMode(p.SOFT_LIGHT);
+                p.image(sharedColorGraphics, 0, 0, canvasWidth, canvasHeight);
+                p.blendMode(p.BLEND);
 
 
                 // Check if mouse is over the image
@@ -143,104 +143,83 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
                     // let scale = newW / originalW;
                     w = newW;
                     h = newH;
+                    scale = inkImage.width / w
+                    // x = x - sharedGraphics.width / scale
+                }
+                // Draw the image
+                p.image(inkImage, x, y, w, h);
+
+
+
+                if (sharedGraphics) {
+
+
+                    const img = sharedGraphics.get(); // 獲取畫布的像素數據
+
+                    img.loadPixels(); // 加載像素數據
+
+                    // 遍歷每個像素
+                    for (let i = 0; i < img.pixels.length; i += 4) {
+                        const r = img.pixels[i];
+                        const g = img.pixels[i + 1];
+                        const b = img.pixels[i + 2];
+
+                        // 判斷是否為白色（或接近白色）
+                        if (r > 240 && g > 240 && b > 240) {
+                            img.pixels[i + 3] = 0; // 將 alpha 值設為 0（透明）
+                        }
+                    }
+                    // console.log('saveCanvasToBuffer')
+
+                    img.updatePixels(); // 更新像素數據
+                    // p.image(img, 0, 0); // 將修改後的像素數據放回畫布
+                    //印章位置
+                    p.image(img, x - img.width / scale / 2, y + h - img.height / scale / 2 / 2, img.width / scale / 2, img.height / scale / 2); // 縮放並繪製共享畫布
                 }
 
-                // Draw the image
-                p.image(img2, x, y, w, h);
-                if (sharedGraphics) {
-                    // console.log(sharedGraphics)
-                    p.image(sharedGraphics, x-w/5, y+h-h/5, w/5,h/5 ); // 縮放並繪製共享畫布
-                  }
-
                 // Draw bounding box and handle only if in edit mode
-                if (editMode) {
+                if (edit_mode.current) {
                     p.noFill();
                     p.stroke(0);
-                    p.rect(x, y, w, h);
+                    p.rect(
+                        x - sharedGraphics.width / scale / 2,
+                        y,
+                        w + sharedGraphics.width / scale / 2,
+                        h + sharedGraphics.height / scale / 2 / 2
+                        // sharedGraphics.height / scale * 3 / 2
+                    );
 
                     // Draw resize handle
                     p.fill(0);
                     p.noStroke();
-                    p.rect(x + w - handleSize / 2, y + h - handleSize / 2, handleSize, handleSize);
+                    p.rect(x + w - handleSize / 2, y + h + sharedGraphics.height / scale / 2 / 2 - handleSize / 2, handleSize, handleSize);
                 }
-
-
-
-
-                if (!p.mouseIsPressed) {
-
-                    for (let stroke of strokes) {
-                        // console.log(stroke,'stroke')
-
-                        drawingLayer.stroke(stroke.color);
-                        drawingLayer.strokeWeight(stroke.size);
-                        for (let i = 0; i < stroke.points.length - 1; i++) {
-                            drawingLayer.line(stroke.points[i].x, stroke.points[i].y, stroke.points[i + 1].x, stroke.points[i + 1].y);
-                        }
-                        // drawingLayer.drawingContext.filter = 'none';
-                    }
-
-
-                    // drawingLayer.filter(p.NORMAL);
-
-                }
-                // 繪製所有已保存的筆劃
-
-                if (p.mouseIsPressed && !editMode) {
-                    // console.log('draw')
-                    tempStroke.points.push({ x: p.mouseX, y: p.mouseY }); // 記錄鼠標位置
-
-                    // 在臨時筆劃上繪製
-
-                    drawingLayer.stroke(tempStroke.color);
-                    // drawingLayer.strokeWeight(27);
-                    if (tempStroke.points.length > 1) {
-                        let lastPoint = tempStroke.points[tempStroke.points.length - 2];
-                        // drawingLayer.drawingContext.filter = 'blur(1px)';
-                        drawingLayer.line(lastPoint.x, lastPoint.y, p.mouseX, p.mouseY);
-                        // drawingLayer.drawingContext.filter = 'none';
-                    }
-
-                }
-
-                // 如果鼠標按下，記錄當前筆劃
-
-
-                // 顯示繪圖圖層
-                p.blendMode(p.SOFT_LIGHT);
-
-                p.image(drawingLayer, 0, 0);
-                // drawingLayer.filter(p.NORMAL, 1);
-                p.blendMode(p.BLEND);
-
-
-               
 
 
             };
 
             p.mousePressed = () => {
-                console.log('mousepress')
+                // console.log('mousepress')
                 // Check if mouse is over the resize handle
                 if (
-                    editMode &&
+                    edit_mode.current &&
                     p.mouseX > x + w - handleSize / 2 &&
                     p.mouseX < x + w + handleSize / 2 &&
-                    p.mouseY > y + h - handleSize / 2 &&
-                    p.mouseY < y + h + handleSize / 2
+                    p.mouseY > y + h + sharedGraphics.height / scale / 2 / 2 - handleSize / 2 &&
+                    p.mouseY < y + h + sharedGraphics.height / scale / 2 / 2 + handleSize / 2
                 ) {
                     resizing = true;
                 }
                 // Check if mouse is over the image
-                else if (p.mouseX > x && p.mouseX < x + w &&p.mouseY > y && p.mouseY < y + h &&editMode) {
+                else if (p.mouseX > x && p.mouseX < x + w && p.mouseY > y && p.mouseY < y + h && edit_mode.current) {
                     dragging = true;
                     offsetX = x - p.mouseX;
-                    offsetY = y -p.mouseY;
-                    // editMode = true; // Enter edit mode
-                    // p.changeEditMode(true)
+                    offsetY = y - p.mouseY;
+                    // edit_mode.current = true; // Enter edit mode
+                    // p.changeedit_mode.current(true)
                 } else {
-                    // editMode = false; // Exit edit mode
-                    // p.changeEditMode(false)
+                    // edit_mode.current = false; // Exit edit mode
+                    // p.changeedit_mode.current(false)
                 }
             }
 
@@ -249,51 +228,41 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
                 dragging = false;
                 resizing = false;
                 // 當鼠標釋放時，將當前筆劃保存到 strokes 數組中
-                if (tempStroke.points.length > 1) {
-                    // console.log(tempStroke, 'tempStroke!!!')
-                    strokes.push(tempStroke);
-                }
-                tempStroke.points = []; // 初始化當前筆劃
-                // tempStroke =  initTempStroke()
-                // console.log(tempStroke,'!!!!!!')
+                console.log('release reszing')
+
             };
 
-            p.touchStarted = ()=>{
+            p.touchStarted = () => {
                 console.log('touchstart')
 
                 // console.log('mousepress')
                 // Check if mouse is over the resize handle
                 if (
-                    editMode &&
+                    edit_mode.current &&
                     p.mouseX > x + w - handleSize / 2 &&
                     p.mouseX < x + w + handleSize / 2 &&
-                    p.mouseY > y + h - handleSize / 2 &&
-                    p.mouseY < y + h + handleSize / 2
+                    p.mouseY > y + h + sharedGraphics.height / scale / 2 / 2 - handleSize / 2 &&
+                    p.mouseY < y + h + sharedGraphics.height / scale / 2 / 2 + handleSize / 2
                 ) {
                     resizing = true;
                 }
                 // Check if mouse is over the image
-                else if (p.mouseX > x && p.mouseX < x + w &&p.mouseY > y && p.mouseY < y + h && editMode) {
+                // x - sharedGraphics.width / scale, y + sharedGraphics.height / scale / 2, sharedGraphics.width / scale, sharedGraphics.height / scale
+                else if (p.mouseX > x - sharedGraphics.width / scale && p.mouseX < x + w && p.mouseY > y && p.mouseY < y + h + sharedGraphics.height / scale / 2 / 2 && edit_mode.current) {
                     dragging = true;
                     offsetX = x - p.mouseX;
-                    offsetY = y -p.mouseY;
-                    // editMode = true; // Enter edit mode
-                    // p.changeEditMode(true)
+                    offsetY = y - p.mouseY;
+                    // edit_mode.current = true; // Enter edit mode
+                    // p.changeedit_mode.current(true)
                 } else {
-                    // editMode = false; // Exit edit mode
-                    // p.changeEditMode(false)
+                    // edit_mode.current = false; // Exit edit mode
+                    // p.changeedit_mode.current(false)
                 }
             }
 
             p.touchEnded = () => {
                 dragging = false;
                 resizing = false;
-
-                if (tempStroke.points.length > 1) {
-                    // console.log(tempStroke, 'tempStroke!!!')
-                    strokes.push(tempStroke);
-                }
-                tempStroke.points = []; // 初始化當前筆劃
             }
 
             // 自定義方法，將畫布保存為 Base64 圖片數據
@@ -304,51 +273,18 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
                 setPaintImageData(dataUrl); // 將 Base64 數據存入 Context
             };
 
-            // p.mousePressed = () => {
-
-            //     // tempStroke = { color: selectedColor, size: brushSize, points: [] }; // 初始化當前筆劃
-            //     // console.log(tempStroke,'tempStroke')
-            // };
         };
 
-        
-        p5Instance.current = new p5(sketch);
-        p5PaintInstance.current = p5Instance.current
-
-
-
+        // Create new p5 instance
+        p5InstanceRef.current = new p5(sketch);
+        p5PaintInstance.current = p5InstanceRef.current
+        // Cleanup
         return () => {
-            if (p5Instance.current) {
-                p5Instance.current.remove()
-            }
+            p5InstanceRef.current?.remove();
         };
-    }, [selectImage]);
+    }, [selectImage, sharedColorGraphics]);
 
-    
+    return <div ref={canvasRef} className='flex-1' />;
+};
 
-    // Update brush color when color changes
-    useEffect(() => {
-        if (p5Instance.current) {
-
-            if (p5Instance.current.drawingLayer) {
-                // console.log(p5Instance.current.drawingLayer,'changecolor')
-                console.log(selectedColor, 'selectedColor')
-                // p5Instance.current.drawingLayer.stroke(selectedColor);
-                // p5Instance.current.drawingLayer.strokeWeight(brushSize);
-                p5Instance.current.changeColor(selectedColor);
-                p5Instance.current.changeSize(brushSize);
-                // initTempStroke()
-
-            }
-        }
-    }, [selectedColor,brushSize]);
-
-
-    return (
-        <div>
-            <h1 className='text-6xl text-center mb-4'>上色</h1>
-            <div id='canvas-container' >
-            </div>
-        
-        </div>);
-}
+export default ImageColor;

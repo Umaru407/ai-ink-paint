@@ -3,9 +3,25 @@ import p5 from 'p5';
 
 import { useP5Sign } from '../contexts/p5SignContext';
 import { useP5Paint } from '../contexts/p5PaintContext';
-const SignCanvas = ({setSharedGraphics}) => {
-    const {p5PaintInstance} = useP5Paint()
-      const [mode, setEditMode] = useState(false);
+import { usePageNavigation } from '../contexts/PageContext';
+const SignCanvas = ({ setSharedGraphics, editMode, setEditMode }) => {
+    const { p5PaintInstance } = useP5Paint()
+    // const [mode, setEditMode] = useState(false);
+    let bgImage;
+
+    const { currentPage, goToPage } = usePageNavigation();
+    const isOnPage = useRef(false);
+
+    useEffect(() => {
+        isOnPage.current = currentPage === 3;
+
+        if (!isOnPage.current) {
+            p5InstanceRef.current?.noLoop()
+        } else {
+            p5InstanceRef.current?.loop()
+        }
+
+    }, [currentPage]);
     // const { recognizeStrokes, setRecognizeStrokes, buttons, setButtons } = useImageContext();
     // let recognizeStrokes: [number[], number[], number[]][] = [];
 
@@ -24,16 +40,6 @@ const SignCanvas = ({setSharedGraphics}) => {
     let canvasHeight = 800
     let canvasWidth = 280;
 
-    // useEffect(() => {
-    //     // console.log('recognizeHandwriting!!!!!!!!!!!!!');
-    //     recognizeHandwriting({
-    //         width: canvasWidth,
-    //         height: canvasHeight
-    //     }, recognizeStrokes, 10, saveResult);
-    // }, [recognizeStrokes]); // 監測 state 的變化
-
-    // const [buttons, setButtons] = useState<string[]>([]);
-
     useEffect(() => {
         // Ensure we're only creating the p5 instance on the client side
         if (typeof window !== 'undefined' && canvasRef.current) {
@@ -51,6 +57,9 @@ const SignCanvas = ({setSharedGraphics}) => {
                 let drawing = false;
                 let drawStartTime = undefined; // Timestamp of first interaction
 
+                p.preload = () => {
+                    bgImage = p.loadImage('/印章.png'); // 替换为你的 SVG 文件路径
+                }
 
                 p.setup = () => {
                     canvas = p.createCanvas(canvasWidth, canvasHeight);
@@ -60,17 +69,28 @@ const SignCanvas = ({setSharedGraphics}) => {
                     setSharedGraphics(graphicsRef.current); // 傳遞給父組件
 
                     canvas.parent(canvasRef.current);
-                    graphicsRef.current.background('red')
-                    graphicsRef.current.stroke('#ffffff')
-                    graphicsRef.current.strokeWeight(15); // 設定邊框寬度為 2 像素
-                    graphicsRef.current.noFill(); // 設定內部不填充
 
-                    // 畫一個只有白色邊框的長方形
-                    graphicsRef.current.rect(30, 30, canvasWidth - 60, canvasHeight - 60);
+                    if (bgImage) {
+                        graphicsRef.current.image(bgImage, 0, 0, canvasWidth, canvasHeight); // 将 SVG 图像拉伸到画布大小
+                    }
+
+                    // graphicsRef.current.background('red')
+                    graphicsRef.current.stroke('#ffffff')
+
+                    // graphicsRef.current.strokeWeight(15); // 設定邊框寬度為 2 像素
+                    // graphicsRef.current.noFill(); // 設定內部不填充
+                    // graphicsRef.current.stroke(255, 0)
+                    // graphicsRef.current.fill(255, 0); // 设置填充色为透明
+                    // graphicsRef.current.noStroke(); // 不绘制边框
+
+                    // // 畫一個只有白色邊框的長方形
+                    // graphicsRef.current.rect(30, 30, canvasWidth - 60, canvasHeight - 60);
                     x = y = ax = ay = a = r = f = 0;
+                    p.noLoop()
                 };
 
                 p.draw = () => {
+                    // console.log('印章draw')
                     // This method is left empty as we'll handle drawing in mousePressed and mouseDragged
                     oldR = r;
                     if (p.mouseIsPressed && p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) {
@@ -135,7 +155,8 @@ const SignCanvas = ({setSharedGraphics}) => {
 
                 // Clear canvas method
                 p.clearCanvas = () => {
-                    p.background('red');
+                    // p.background('red');
+                    graphicsRef.current.image(bgImage, 0, 0, canvasWidth, canvasHeight);
                     strokes = [];
                 };
 
@@ -172,15 +193,18 @@ const SignCanvas = ({setSharedGraphics}) => {
                         // recognizeStrokes.pop();
                         // setRecognizeStrokes((prev) => prev.slice(0, -1)); // 函數式更新
                         // Redraw all remaining strokes
-                        graphicsRef.current.clear()
+                        //     graphicsRef.current.clear()
 
-                        graphicsRef.current.background('red')
-                    graphicsRef.current.stroke('#ffffff')
-                    graphicsRef.current.strokeWeight(15); // 設定邊框寬度為 2 像素
-                    graphicsRef.current.noFill(); // 設定內部不填充
+                        //     graphicsRef.current.background('red')
+                        // graphicsRef.current.stroke('#ffffff')
+                        // graphicsRef.current.strokeWeight(15); // 設定邊框寬度為 2 像素
+                        // graphicsRef.current.noFill(); // 設定內部不填充
 
-                    // 畫一個只有白色邊框的長方形
-                    graphicsRef.current.rect(30, 30, canvasWidth - 60, canvasHeight - 60);
+                        graphicsRef.current.image(bgImage, 0, 0, canvasWidth, canvasHeight);
+
+
+                        // 畫一個只有白色邊框的長方形
+                        // graphicsRef.current.rect(30, 30, canvasWidth - 60, canvasHeight - 60);
 
                         strokes.forEach((stroke) => {
                             ax = ay = f = 0;
@@ -255,8 +279,27 @@ const SignCanvas = ({setSharedGraphics}) => {
                 // 自定義方法，將畫布保存為 Base64 圖片數據
                 p.saveCanvasToBuffer = () => {
                     const canvas = p.canvas; // 獲取 HTML Canvas 元素
+                    const img = p.get(); // 獲取畫布的像素數據
+
+                    img.loadPixels(); // 加載像素數據
+
+                    // 遍歷每個像素
+                    for (let i = 0; i < img.pixels.length; i += 4) {
+                        const r = img.pixels[i];
+                        const g = img.pixels[i + 1];
+                        const b = img.pixels[i + 2];
+
+                        // 判斷是否為白色（或接近白色）
+                        if (r > 240 && g > 240 && b > 240) {
+                            img.pixels[i + 3] = 0; // 將 alpha 值設為 0（透明）
+                        }
+                    }
+                    console.log('saveCanvasToBuffer')
+
+                    img.updatePixels(); // 更新像素數據
+                    p.image(img, 0, 0); // 將修改後的像素數據放回畫布
+
                     const dataUrl = canvas.toDataURL("image/png"); // 將畫布轉為 Base64
-                    //console.log(dataUrl,'777')
                     setSignImageData(dataUrl); // 將 Base64 數據存入 Context
                 };
             };
@@ -281,13 +324,15 @@ const SignCanvas = ({setSharedGraphics}) => {
 
         p5InstanceRef.current?.clearCanvas();
 
-        graphicsRef.current.background('red')
-                    graphicsRef.current.stroke('#ffffff')
-                    graphicsRef.current.strokeWeight(15); // 設定邊框寬度為 2 像素
-                    graphicsRef.current.noFill(); // 設定內部不填充
 
-                    // 畫一個只有白色邊框的長方形
-                    graphicsRef.current.rect(30, 30, canvasWidth - 60, canvasHeight - 60);
+
+        // graphicsRef.current.background('red')
+        //             graphicsRef.current.stroke('#ffffff')
+        //             graphicsRef.current.strokeWeight(15); // 設定邊框寬度為 2 像素
+        //             graphicsRef.current.noFill(); // 設定內部不填充
+
+        //             // 畫一個只有白色邊框的長方形
+        //             graphicsRef.current.rect(30, 30, canvasWidth - 60, canvasHeight - 60);
     };
 
 
@@ -299,15 +344,15 @@ const SignCanvas = ({setSharedGraphics}) => {
     };
 
     // let mode = false
-    const changeEditMode = () =>{
-        setEditMode((prevState) => !prevState);
-        
-    }
+    // const changeEditMode = () => {
+    //     setEditMode((prevState) => !prevState);
 
-    useEffect(() => {
-        p5PaintInstance.current?.changeEditMode(mode)
-    }, [mode])
-    
+    // }
+
+    // useEffect(() => {
+    //     p5PaintInstance.current?.changeEditMode(mode)
+    // }, [mode])
+
 
     // const saveResult = (result) => {
     //     // console.log('result',result)
@@ -319,7 +364,7 @@ const SignCanvas = ({setSharedGraphics}) => {
     // };
 
     return (
-        <div className="paper flex flex-col justify-center items-center flex-grow">
+        <div className="paper flex flex-col justify-center items-center">
             <div> <h1 className='text-6xl text-center mb-4'>落款</h1>
                 <div ref={canvasRef} className="canvas-container bg-white w-min" ></div></div>
             <div className="canvas-controls flex flex-col mt-12">
@@ -331,8 +376,11 @@ const SignCanvas = ({setSharedGraphics}) => {
                         回上一筆畫
                     </button>
                 </div>
-                <button onClick={changeEditMode} id='canvas-undo' className="bg-blue-500 hover:bg-blue-700 text-4xl text-white font-bold py-2 px-4 rounded mt-4 ">
-                    {mode ? '編輯大小OFF' : '編輯大小ON'}
+                <button onClick={() => {
+                    console.log(editMode)
+                    setEditMode(!editMode);
+                }} id='canvas-undo' className="bg-blue-500 hover:bg-blue-700 text-4xl text-white font-bold py-2 px-4 rounded mt-4 ">
+                    {editMode ? '編輯大小OFF' : '編輯大小ON'}
                 </button>
             </div>
             {/* <TextRecongnizeArea buttonLabels = {buttons} setButtons = {setButtons} resetRecognizeStrokes = {resetRecognizeStrokes}  /> */}

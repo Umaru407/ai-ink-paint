@@ -7,7 +7,7 @@ import ImageColor from '../components/ImageColor';
 import { useP5Paint } from '../contexts/p5PaintContext';
 import { usePageNavigation } from '../contexts/PageContext';
 import SignCanvas from '../components/SignCanvas';
-
+import ColorCanva from '../components/ColorCanva';
 
 // type p5ContextType = p5 | null;
 
@@ -53,7 +53,7 @@ function BrushSizeSlector({ selectedColor, setBrushSize }) {
         <div className='grid grid-cols-2 gap-4  place-items-center' >
             {
                 brushSizes.map((size, index) => (
-                    <div key={index} 
+                    <div key={index}
                         className='border-white w-full h-full flex items-center justify-center'
                     >
                         <div className='rounded-full flex items-center justify-center' style={{ backgroundColor: selectedColor, width: `${size}px`, height: `${size}px` }}
@@ -93,31 +93,37 @@ export default function Page2() {
 
     // const { selectImage } = useSelectImageContext();
     const [sharedGraphics, setSharedGraphics] = useState(null); // 共享畫布數據
+    const [sharedColorGraphics, setSharedColorGraphics] = useState(null); // 共享畫布數據
     const [selectedColor, setSelectedColor] = useState(colors[0]);
     const [brushSize, setBrushSize] = useState(20);
+    const [editMode, setEditMode] = useState(false)
     return (
         <div className="paper-container flex flex-col h-full justify-between gap-8">
-           <div className='px-8 flex flex-col flex-grow'>
-                <div className='flex '>
-                    <div className='my-auto'><ImageColor setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} selectedColor={selectedColor} brushSize={brushSize} /></div>
-                    <SignCanvas setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} />
+            <div className='px-8 flex flex-col flex-grow'>
+                <div className='flex'>
+
+                    <div>
+                        <ColorCanva setSharedColorGraphics={setSharedColorGraphics} selectedColor={selectedColor} brushSize={brushSize} editMode={editMode} setEditMode={setEditMode} />
+                        <ImageColor editMode={editMode} setEditMode={setEditMode} sharedColorGraphics={sharedColorGraphics} setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} selectedColor={selectedColor} brushSize={brushSize} />
+                    </div>
+                    <SignCanvas setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} editMode={editMode} setEditMode={setEditMode} />
                 </div>
-    
-    
+
+
                 <div className='my-auto'>
                     <h2 className='text-6xl text-center mb-2'>
-                        筆刷設定
+                        顏彩
                     </h2>
-    
+
                     <div className="flex justify-center gap-8">
-    
-                        <BrushSizeSlector selectedColor={selectedColor} setBrushSize={setBrushSize} />
+
+                        {/* <BrushSizeSlector selectedColor={selectedColor} setBrushSize={setBrushSize} /> */}
                         {/* <TestFabric selectedColor={selectedColor}> </TestFabric> */}
                         <ColorPalette setSelectedColor={setSelectedColor} />
                     </div>
                 </div>
-    
-           </div>
+
+            </div>
 
             <DoneButton />
         </div>

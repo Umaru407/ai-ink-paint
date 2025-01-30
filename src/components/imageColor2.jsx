@@ -249,7 +249,13 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
                 dragging = false;
                 resizing = false;
                 // 當鼠標釋放時，將當前筆劃保存到 strokes 數組中
-                
+                if (tempStroke.points.length > 1) {
+                    // console.log(tempStroke, 'tempStroke!!!')
+                    strokes.push(tempStroke);
+                }
+                tempStroke.points = []; // 初始化當前筆劃
+                // tempStroke =  initTempStroke()
+                // console.log(tempStroke,'!!!!!!')
             };
 
             p.touchStarted = ()=>{
@@ -282,6 +288,12 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
             p.touchEnded = () => {
                 dragging = false;
                 resizing = false;
+
+                if (tempStroke.points.length > 1) {
+                    // console.log(tempStroke, 'tempStroke!!!')
+                    strokes.push(tempStroke);
+                }
+                tempStroke.points = []; // 初始化當前筆劃
             }
 
             // 自定義方法，將畫布保存為 Base64 圖片數據

@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 import p5 from 'p5';
 import recognizeHandwriting from '../utils/recognizeHandwriting';
@@ -6,71 +7,45 @@ import recognizeHandwriting from '../utils/recognizeHandwriting';
 // type p5ContextType = p5 | null;
 import { useImageContext } from '../contexts/ImageContext';
 import { useP5Ink } from '../contexts/p5InkContext';
-
-// 擴展 p5 型別
-// declare module 'p5' {
-//     interface p5InstanceExtensions {
-//         clearCanvas: () => void;
-//         undoLastStroke: () => void;
-//         getMillsecondFromStrokeStart: () => number;
-//         saveStrokeStep: () => void;
-//         endDraw: (event: object) => void;
-//         drawStroke: (stroke: Stroke) => void;
-//         getRecognizeStrokes: () => Stroke[];
-//         getCanvasSize: () => object
-//         resetRecognizeStrokes:()=>void
-//     }
-// }
-
-// interface HandwritingCanvasProps {
+import { Switch } from '@heroui/react';
 
 
 
-//   }
-//  const { images, setImages, prompt, setPrompt,setRecognizeStrokes,recognizeStrokes } = useImageContext();
-// An array of Stroke objects
-
-
-
-const HandwritingCanvas = () => {
+const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
     const { recognizeStrokes, setRecognizeStrokes, buttons, setButtons } = useImageContext();
+    const [isSelected, setIsSelected] = React.useState(true);
+    const strokeMax = 16;
+
+    const GRID_COLS = 4;
+    const GRID_ROWS = 5;
+    // console.log(canvasWidth, canvasHeight, '@@')
     // let recognizeStrokes: [number[], number[], number[]][] = [];
 
     const setting = {
         distance: 10,
         spring: 0.3,
         friction: 0.5,
-        size: 28,
-        diff: 28 / 8
+        size: strokeMax,
+        diff: strokeMax / 8
     }
-
-    
     const canvasRef = useRef(null);
     const p5InstanceRef = useRef(null);
     const { p5InkInstance, setP5InkReady, setInkImageData } = useP5Ink();
 
-    // let canvasHeight = window.innerHeight * 5 / 6
-    // let canvasWidth = canvasHeight * 1 / 2.5;
-
-    let canvasHeight = window.innerHeight * 5 / 6
-    let canvasWidth = canvasHeight * 1 / 2.4;
-
     useEffect(() => {
-        // console.log('recognizeHandwriting!!!!!!!!!!!!!');
         recognizeHandwriting({
             width: canvasWidth,
             height: canvasHeight
         }, recognizeStrokes, 10, saveResult);
     }, [recognizeStrokes]); // 監測 state 的變化
 
-    // const [buttons, setButtons] = useState<string[]>([]);
 
     useEffect(() => {
         // Ensure we're only creating the p5 instance on the client side
         if (typeof window !== 'undefined' && canvasRef.current) {
             // Sketch function for p5
             const sketch = (p) => {
-                let canvas
+                let canvas, grid_layer;
                 let currentStroke = [[], [], []]; // 0: [Samples of position X], 1: [Samples of position Y], 2: [millseconds since first stroke start] <optional>
                 let strokes = [];
 
@@ -78,19 +53,69 @@ const HandwritingCanvas = () => {
                 let x, y, ax, ay, a, r, f //: number
                 let oldR //: number;
                 let isMax = false
-                let strokeMax = 20;
+
                 /* Draw status */
                 let drawing = false;
                 let drawStartTime = undefined; // Timestamp of first interaction
 
-
                 p.setup = () => {
+                    // 創建主畫布
                     canvas = p.createCanvas(canvasWidth, canvasHeight);
+                    grid_layer = p.createGraphics(p.width, p.height);
                     canvas.parent(canvasRef.current);
                     x = y = ax = ay = a = r = f = 0;
+                
+                    // 設置外邊距
+                    const padding = 20; // 你可以根據需要調整這個值
+                    const gridWidth = canvasWidth - 2 * padding; // 格線的寬度
+                    const gridHeight = canvasHeight - 2 * padding; // 格線的高度
+                
+                    // 繪製格子的邊框（2px）
+                    grid_layer.stroke('red');
+                    grid_layer.strokeWeight(3); // 設置邊框線條寬度為 2px
+                    
+                    // 垂直線
+                    for (let i = 0; i <= GRID_COLS; i++) {
+                        const x = padding + i * gridWidth / GRID_COLS;
+                        grid_layer.line(x, padding, x, padding + gridHeight);
+                    }
+                    
+                    // 水平線
+                    for (let i = 0; i <= GRID_ROWS; i++) {
+                        const y = padding + i * gridHeight / GRID_ROWS;
+                        grid_layer.line(padding, y, padding + gridWidth, y);
+                    }
+                
+                    // 繪製每個格子的「米」字線（1px）
+                    grid_layer.strokeWeight(1); // 設置「米」字線條寬度為 1px
+                    for (let col = 0; col < GRID_COLS; col++) {
+                        for (let row = 0; row < GRID_ROWS; row++) {
+                            const x1 = padding + col * gridWidth / GRID_COLS; // 格子左邊界
+                            const x2 = padding + (col + 1) * gridWidth / GRID_COLS; // 格子右邊界
+                            const y1 = padding + row * gridHeight / GRID_ROWS; // 格子上邊界
+                            const y2 = padding + (row + 1) * gridHeight / GRID_ROWS; // 格子下邊界
+                
+                            // 十字線（垂直和水平線）
+                            const midX = (x1 + x2) / 2; // 格子中間的垂直線
+                            const midY = (y1 + y2) / 2; // 格子中間的水平線
+                            grid_layer.line(midX, y1, midX, y2); // 垂直線
+                            grid_layer.line(x1, midY, x2, midY); // 水平線
+                
+                            // 對角線（左上到右下，右上到左下）
+                            grid_layer.line(x1, y1, x2, y2); // 左上到右下
+                            grid_layer.line(x2, y1, x1, y2); // 右上到左下
+                        }
+                    }
+                
+                    // 將格線畫到主畫布上
+                    p.image(grid_layer, 0, 0);
                 };
 
                 p.draw = () => {
+
+                    
+
+                    // p.stroke('black');
                     // This method is left empty as we'll handle drawing in mousePressed and mouseDragged
                     oldR = r;
                     if (p.mouseIsPressed && p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) {
@@ -98,8 +123,7 @@ const HandwritingCanvas = () => {
 
                     }
                     if (p.mouseIsPressed && drawing) {
-                        // console.log("8888")
-                        // console.log(currentStroke)
+
                         const ms = p.getMillsecondFromStrokeStart();
                         const mX = p.mouseX;
                         const mY = p.mouseY;
@@ -272,11 +296,9 @@ const HandwritingCanvas = () => {
                     setRecognizeStrokes([])
                 }
                     ;
-                // 自定義方法，將畫布保存為 Base64 圖片數據
                 p.saveCanvasToBuffer = () => {
                     const canvas = p.canvas; // 獲取 HTML Canvas 元素
                     const dataUrl = canvas.toDataURL("image/png"); // 將畫布轉為 Base64
-                    //console.log(dataUrl,'777')
                     setInkImageData(dataUrl); // 將 Base64 數據存入 Context
                 };
             };
@@ -285,18 +307,14 @@ const HandwritingCanvas = () => {
             p5InstanceRef.current = new p5(sketch);
 
             p5InkInstance.current = p5InstanceRef.current;
-            // console.log(p5inkInstance,'789')
-            // Cleanup function
             return () => {
                 p5InstanceRef.current?.remove();
             };
         }
-    }, []);
+    }, [canvasWidth]);
 
     // Method to clear canvas from outside
     const clearCanvas = () => {
-        // p5inkInstance.current?.saveCanvas("myCanvas", "png");
-        // p5inkInstance.current?.saveCanvasToBuffer()
         p5InstanceRef.current?.clearCanvas();
     };
 
@@ -319,19 +337,10 @@ const HandwritingCanvas = () => {
 
     return (
         <div className="paper">
-            <div ref={canvasRef} className="canvas-container bg-white w-min" ></div>
-            <div className="canvas-controls">
-                <button onClick={clearCanvas} id='canvas-clear' className="bg-blue-500 hover:bg-blue-700 text-white text-4xl font-bold  py-2 px-4 rounded ">
-                    清除
-                </button>
-                <button onClick={undoLastStroke} id='canvas-undo' className="bg-blue-500 hover:bg-blue-700 text-4xl text-white font-bold py-2 px-4 rounded  ">
-                    回上一筆畫
-                </button>
-            </div>
-            {/* <TextRecongnizeArea buttonLabels = {buttons} setButtons = {setButtons} resetRecognizeStrokes = {resetRecognizeStrokes}  /> */}
+            <div ref={canvasRef} className="canvas-container bg-white" ></div>
         </div>
     );
 }
 
 
-export default HandwritingCanvas;
+export default CalligraphyPoemCanva;

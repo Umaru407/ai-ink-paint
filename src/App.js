@@ -12,8 +12,13 @@ import { P5InkProvider } from './contexts/p5InkContext';
 import { P5PaintProvider } from './contexts/p5PaintContext';
 import Page3 from './pages/Page3';
 import { P5SignProvider } from './contexts/p5SignContext';
-import Page0 from './pages/Page0';
+import Calligraphy_Page from './pages/Calligraphy_Page';
 import { HeroUIProvider } from "@heroui/react";
+import Select_Poetry_Page from './pages/Select_Poetry_Page';
+import { SelectPoetryProvider } from './contexts/SelectPoetryContext';
+import Select_Paint_Page from './pages/Select_Paint_Page';
+import ImageColor from './components/ImageColor';
+import ColorCanva from './components/ColorCanva';
 
 
 const Page = ({ position, children }) => (
@@ -62,9 +67,12 @@ const FullscreenPages = ({ pages }) => {
 
 export default function Home() {
   const pages = [
-    <Page0 />,
-    <Page1 />,
-    <Page2></Page2>
+    // <ColorCanva/>,
+    <Select_Poetry_Page />,
+    <Calligraphy_Page />,
+    <Select_Paint_Page />,
+    // <Page1 />,
+    <Page2 />
     , <Page3 />,
 
     <div key="2" className="bg-green-500 h-full flex items-center justify-center">
@@ -78,17 +86,20 @@ export default function Home() {
   return (
     <HeroUIProvider>
 
+
       <PageProvider totalPages={pages.length}>
         <ImageProvider>
           <P5InkProvider>
             <P5PaintProvider>
-              <P5SignProvider><SelectImageProvider>
-                <FullscreenPages pages={pages} />
-              </SelectImageProvider></P5SignProvider>
-
+              <P5SignProvider>
+                <SelectImageProvider>
+                  <SelectPoetryProvider>
+                    <FullscreenPages pages={pages} />
+                  </SelectPoetryProvider>
+                </SelectImageProvider>
+              </P5SignProvider>
             </P5PaintProvider>
           </P5InkProvider>
-
         </ImageProvider>
       </PageProvider>
     </HeroUIProvider>

@@ -34,7 +34,7 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
             let canvasWidth
             let canvasHeight
             let drawingLayer
-
+            let scale = 6; // Scale factor for resizing
 
             let dragging = false; // Is the object being dragged?
             let resizing = false; // Is the object being resized?
@@ -78,8 +78,10 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
                 y = 100;
 
                 // Dimensions
-                w = 200;
-                h = 500;
+                
+                w = img2.width/scale;
+                h = img2.height/scale;
+
                 // Calculate initial aspect ratio
                 aspectRatio = w / h;
 
@@ -140,7 +142,7 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
                     newW = p.max(newW, 20);
                     newH = p.max(newH, 20 / aspectRatio);
 
-                    // let scale = newW / originalW;
+                    scale =img2.width/ newW  ;
                     w = newW;
                     h = newH;
                 }
@@ -148,9 +150,26 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
                 // Draw the image
                 p.image(img2, x, y, w, h);
                 if (sharedGraphics) {
-                    // console.log(sharedGraphics)
-                    p.image(sharedGraphics, x-w/5, y+h-h/5, w/5,h/5 ); // 縮放並繪製共享畫布
-                  }
+                    // 獲取 sharedGraphics 的像素數據
+                    sharedGraphics.loadPixels(); // 加載像素數據
+                
+                    // 遍歷每個像素
+                    for (let i = 0; i < sharedGraphics.pixels.length; i += 4) {
+                        const r = sharedGraphics.pixels[i];
+                        const g = sharedGraphics.pixels[i + 1];
+                        const b = sharedGraphics.pixels[i + 2];
+                
+                        // 判斷是否為白色（或接近白色）
+                        if (r > 240 && g > 240 && b > 240) {
+                            sharedGraphics.pixels[i + 3] = 0; // 將 alpha 值設為 0（透明）
+                        }
+                    }
+                
+                    sharedGraphics.updatePixels(); // 更新像素數據
+                
+                    // 將修改後的 sharedGraphics 繪製到主畫布上
+                    p.image(sharedGraphics, x - w / 5, y + h - h / 5, sharedGraphics.width / scale * 0.7, sharedGraphics.height / scale * 0.7);
+                }
 
                 // Draw bounding box and handle only if in edit mode
                 if (editMode) {
@@ -249,7 +268,13 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
                 dragging = false;
                 resizing = false;
                 // 當鼠標釋放時，將當前筆劃保存到 strokes 數組中
-                
+                if (tempStroke.points.length > 1) {
+                    // console.log(tempStroke, 'tempStroke!!!')
+                    strokes.push(tempStroke);
+                }
+                tempStroke.points = []; // 初始化當前筆劃
+                // tempStroke =  initTempStroke()
+                // console.log(tempStroke,'!!!!!!')
             };
 
             p.touchStarted = ()=>{
@@ -282,6 +307,12 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
             p.touchEnded = () => {
                 dragging = false;
                 resizing = false;
+
+                if (tempStroke.points.length > 1) {
+                    // console.log(tempStroke, 'tempStroke!!!')
+                    strokes.push(tempStroke);
+                }
+                tempStroke.points = []; // 初始化當前筆劃
             }
 
             // 自定義方法，將畫布保存為 Base64 圖片數據
@@ -318,15 +349,9 @@ export default function ImageColor({sharedGraphics, selectedColor,brushSize }) {
     useEffect(() => {
         if (p5Instance.current) {
 
-            if (p5Instance.current.drawingLayer) {
-                // console.log(p5Instance.current.drawingLayer,'changecolor')
-                console.log(selectedColor, 'selectedColor')
-                // p5Instance.current.drawingLayer.stroke(selectedColor);
-                // p5Instance.current.drawingLayer.strokeWeight(brushSize);
+            if (p5Instance.current.drawingLayer) {  
                 p5Instance.current.changeColor(selectedColor);
                 p5Instance.current.changeSize(brushSize);
-                // initTempStroke()
-
             }
         }
     }, [selectedColor,brushSize]);
