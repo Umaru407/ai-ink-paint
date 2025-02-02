@@ -5,7 +5,9 @@ import { useEffect } from 'react';
 import { useWebSocketImageGenerator } from '../hooks/useWebSocketImageGenerator';
 import { useImageContext } from '../contexts/ImageContext';
 import ink_paint_v2 from '../assets/ink_paint_v2.json'
-import { Button } from '@heroui/react';
+import Button from './Button';
+import Text from './Text';
+// import { Button } from '@heroui/react';
 
 
 // import TextRecongnizeArea from './TextRecongnizeArea';
@@ -40,8 +42,8 @@ export const GenerateButton = () => {
       disabled={!prompt}
       fullWidth
       size='lg'
-      className='text-4xl'
-    >產生水墨畫
+
+    ><Text type='heading'>產生水墨畫</Text>
     </Button >
 
     // {error && <p className="text-red-500 mt-2">{error}</p>}

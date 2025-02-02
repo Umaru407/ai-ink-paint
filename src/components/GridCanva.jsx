@@ -21,9 +21,12 @@ const GridCanva = ({ canvasWidth, canvasHeight, showGrid }) => {
                 // let show = showGridRef.current;
 
                 p.setup = () => {
+                    p.pixelDensity(1);
                     const canvas = p.createCanvas(canvasWidth, canvasHeight);
                     canvas.parent(canvasRef.current);
                     p.noLoop();
+                    console.log(canvas.width, canvas.height, '234')
+                    console.log(p,p.canvas.width, p.canvas.height, 'p.canvas')
                 };
 
                 p.draw = () => {

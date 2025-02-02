@@ -14,10 +14,12 @@ import { usePageNavigation } from '../contexts/PageContext';
 
 const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
     const { recognizeStrokes, setRecognizeStrokes, buttons, setButtons } = useImageContext();
-    const [isSelected, setIsSelected] = React.useState(true);
     const strokeMax = 16;
     const { currentPage, goToPage } = usePageNavigation();
     const isOnPage = useRef(false);
+
+
+    console.log(canvasWidth, canvasHeight, 'canvasWidth, canvasHeight!!!')
 
     useEffect(() => {
         isOnPage.current = currentPage === 1;
@@ -70,6 +72,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
 
                 p.setup = () => {
                     // 創建主畫布
+                    p.pixelDensity(1);
                     canvas = p.createCanvas(canvasWidth, canvasHeight);
                     canvas.parent(canvasRef.current);
                     x = y = ax = ay = a = r = f = 0;
@@ -272,6 +275,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                     ;
                 p.saveCanvasToBuffer = () => {
                     const canvas = p.canvas;
+                    // console.log(canvas.width, canvas.height, 'canvas!!!')
                     const img = p.get(); // 取得當前畫布影像
                     img.loadPixels();
 
@@ -306,9 +310,12 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                     // 建立新畫布並複製內容
                     const buffer = p.createGraphics(width, height);
                     buffer.image(img, -left, -top);
-
+                    // console.log(buffer,width, height, 'buffer')
                     // 轉換為 Base64
                     const dataUrl = buffer.elt.toDataURL("image/png");
+                    //show image in blank website
+                    // window.open(dataUrl, '_blank');
+                    console.log(dataUrl, 'dataUrl')
                     setInkImageData(dataUrl);
                 };
             };

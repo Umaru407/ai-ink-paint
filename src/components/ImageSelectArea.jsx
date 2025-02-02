@@ -33,7 +33,7 @@ const ImageSelectArea = () => {
                                 alt={`generated ${index + 1}`}
                                 className="w-full object-contain"
                                 onClick={() => {setSelectImage(image)
-                                    p5InkInstance.current?.saveCanvasToBuffer()
+                                    // p5InkInstance.current?.saveCanvasToBuffer()
                                     goToPage(1)
                                     console.log(image,'image')
                                 }}

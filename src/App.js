@@ -6,8 +6,7 @@ import { ImageProvider } from './contexts/ImageContext';
 
 import { SelectImageProvider } from './contexts/SelectImageContext';
 import { PageProvider, usePageNavigation } from './contexts/PageContext';
-import Page1 from './pages/Page1';
-import Page2 from './pages/Page2';
+
 import { P5InkProvider } from './contexts/p5InkContext';
 import { P5PaintProvider } from './contexts/p5PaintContext';
 import Page3 from './pages/Page3';
@@ -17,10 +16,10 @@ import { HeroUIProvider } from "@heroui/react";
 import Select_Poetry_Page from './pages/Select_Poetry_Page';
 import { SelectPoetryProvider } from './contexts/SelectPoetryContext';
 import Select_Paint_Page from './pages/Select_Paint_Page';
-import ImageColor from './components/ImageColor';
-import ColorCanva from './components/ColorCanva';
-
-
+import StampPage from './pages/Stamp_Page';
+import PaintPage from './pages/Paint_Page';
+import { P5ColorProvider } from './contexts/p5ColorContext';
+import { StampStylesProvider } from './contexts/stampStyleContext';
 const Page = ({ position, children }) => (
   <div
     className="absolute w-screen h-screen transition-transform duration-500 ease-in-out"
@@ -71,16 +70,11 @@ export default function Home() {
     <Select_Poetry_Page />,
     <Calligraphy_Page />,
     <Select_Paint_Page />,
-    // <Page1 />,
-    <Page2 />
-    , <Page3 />,
+    <PaintPage />,
+    <StampPage />,
+    <Page3 />,
 
-    <div key="2" className="bg-green-500 h-full flex items-center justify-center">
-      <h1>自訂頁面 3</h1>
-    </div>,
-    <div key="2" className="bg-green-500 h-full flex items-center justify-center">
-      <h1>自訂頁面 4</h1>
-    </div>
+
   ];
 
   return (
@@ -92,11 +86,15 @@ export default function Home() {
           <P5InkProvider>
             <P5PaintProvider>
               <P5SignProvider>
-                <SelectImageProvider>
-                  <SelectPoetryProvider>
-                    <FullscreenPages pages={pages} />
-                  </SelectPoetryProvider>
-                </SelectImageProvider>
+                <P5ColorProvider>
+                  <StampStylesProvider>
+                    <SelectImageProvider>
+                      <SelectPoetryProvider>
+                        <FullscreenPages pages={pages} />
+                      </SelectPoetryProvider>
+                    </SelectImageProvider>
+                  </StampStylesProvider>
+                </P5ColorProvider>
               </P5SignProvider>
             </P5PaintProvider>
           </P5InkProvider>

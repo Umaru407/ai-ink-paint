@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelectImageContext } from '../contexts/SelectImageContext';
 import p5 from 'p5';
@@ -8,6 +7,10 @@ import { useP5Paint } from '../contexts/p5PaintContext';
 import { usePageNavigation } from '../contexts/PageContext';
 import SignCanvas from '../components/SignCanvas';
 import ColorCanva from '../components/ColorCanva';
+import Text from '../components/Text';
+import Button from '../components/Button';
+
+import IconSwitch from '../components/IconSwitch';
 
 // type p5ContextType = p5 | null;
 
@@ -35,14 +38,14 @@ const brushSizes = [
 
 function ColorPalette({ setSelectedColor }) {
     return (
-        // <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '10px', padding: '20px' }}>
-        <div className='grid grid-cols-6 gap-2'>
+        <div className='grid grid-cols-6 gap-4 w-full '>
             {colors.map((color, index) => (
-                <div key={index} onClick={() => {
-                    setSelectedColor(color)
-                    // console.log(color,'color')
-
-                }} style={{ backgroundColor: color, width: '80px', height: '80px', borderRadius: '4px', border: '1px solid #000' }}></div>
+                <div
+                    key={index}
+                    onClick={() => setSelectedColor(color)}
+                    className="aspect-square  border border-black rounded cursor-pointer hover:opacity-80"
+                    style={{ backgroundColor: color }}
+                ></div>
             ))}
         </div>
     );
@@ -73,12 +76,12 @@ function DoneButton() {
     const { p5PaintInstance } = useP5Paint()
     const { goToPage } = usePageNavigation();
     return (
-        <button onClick={() => {
+        <Button fullWidth onPress={() => {
             p5PaintInstance.current?.saveCanvasToBuffer()
             goToPage(1)
-        }} id='done project' className="bg-blue-500 hover:bg-blue-700 text-4xl text-white font-bold py-2 px-4 rounded  ">
-            完成作品
-        </button>
+        }}>
+            <Text type="heading" >完成作品</Text>
+        </Button>
     )
 }
 
@@ -88,8 +91,21 @@ function DoneButton() {
 //     points: { x: number; y: number }[];
 // }
 
-export default function Page2() {
+export default function PaintPage() {
+    const ColorContainer = useRef(null);
+    const [colorDimensions, setColorDimensions] = useState({ width: 0, height: 0 });
 
+    useEffect(() => {
+        if (!ColorContainer.current) return;
+        //get the height of the color container
+        const height = ColorContainer.current.offsetHeight;
+        //get the width of the color container
+        const width = ColorContainer.current.offsetWidth;
+
+        console.log(width, height, 'width, height')
+
+        setColorDimensions({ width, height });
+    }, [ColorContainer.current?.offsetHeight]);
 
     // const { selectImage } = useSelectImageContext();
     const [sharedGraphics, setSharedGraphics] = useState(null); // 共享畫布數據
@@ -98,34 +114,35 @@ export default function Page2() {
     const [brushSize, setBrushSize] = useState(20);
     const [editMode, setEditMode] = useState(false)
     return (
-        <div className="paper-container flex flex-col h-full justify-between gap-8">
-            <div className='px-8 flex flex-col flex-grow'>
-                <div className='flex'>
+        <div className="paper-container flex flex-col h-full justify-between">
+            <div className='px-8 flex flex-col flex-1'>
+                <div className='flex gap-6 flex-1' >
+                    <div className='h-full flex flex-col '>
+                        <Text type="title">上色</Text>
+                        <div ref={ColorContainer} className='flex-1'>
+                            <ColorCanva maxCanvasHeight={colorDimensions.height} setSharedColorGraphics={setSharedColorGraphics} selectedColor={selectedColor} brushSize={brushSize} editMode={editMode} setEditMode={setEditMode} />
+                            <ImageColor maxCanvasHeight={colorDimensions.height} editMode={editMode} setEditMode={setEditMode} sharedColorGraphics={sharedColorGraphics} setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} selectedColor={selectedColor} brushSize={brushSize} />
+                        </div>
+                    </div>
 
                     <div>
-                        <ColorCanva setSharedColorGraphics={setSharedColorGraphics} selectedColor={selectedColor} brushSize={brushSize} editMode={editMode} setEditMode={setEditMode} />
-                        <ImageColor editMode={editMode} setEditMode={setEditMode} sharedColorGraphics={sharedColorGraphics} setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} selectedColor={selectedColor} brushSize={brushSize} />
+                        <Text type="title">落款</Text>
+                        <SignCanvas setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} editMode={editMode} setEditMode={setEditMode} />
                     </div>
-                    <SignCanvas setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} editMode={editMode} setEditMode={setEditMode} />
                 </div>
 
 
-                <div className='my-auto'>
-                    <h2 className='text-6xl text-center mb-2'>
-                        顏彩
-                    </h2>
+                <div className='mx-12  my-6 flex flex-col justify-end '>
 
-                    <div className="flex justify-center gap-8">
-
-                        {/* <BrushSizeSlector selectedColor={selectedColor} setBrushSize={setBrushSize} /> */}
-                        {/* <TestFabric selectedColor={selectedColor}> </TestFabric> */}
-                        <ColorPalette setSelectedColor={setSelectedColor} />
-                    </div>
+                    <Text type="subtitle">顏彩</Text>
+                    <ColorPalette setSelectedColor={setSelectedColor} />
                 </div>
 
             </div>
 
-            <DoneButton />
+            <div className="px-8 pb-4 ">
+                <DoneButton />
+            </div>
         </div>
     );
 }

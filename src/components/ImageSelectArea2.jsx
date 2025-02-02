@@ -32,7 +32,7 @@ const ImageSelectArea = () => {
                         className="w-full h-full object-cover" // 修改這裡
                         onClick={() => {
                             setSelectImage(image)
-                            p5InkInstance.current?.saveCanvasToBuffer()
+                            // p5InkInstance.current?.saveCanvasToBuffer()
                             goToPage(1)
                             console.log(image, 'image')
                         }}

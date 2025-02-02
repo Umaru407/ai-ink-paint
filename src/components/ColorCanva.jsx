@@ -8,19 +8,19 @@ import { useSelectImageContext } from '../contexts/SelectImageContext';
 
 
 
-const ColorCanva = ({ setSharedColorGraphics, selectedColor, brushSize, editMode }) => {
+const ColorCanva = ({ maxCanvasHeight,setSharedColorGraphics, selectedColor, brushSize, editMode }) => {
     const canvasRef = useRef(null);
 
     const p5InstanceRef = useRef(null);
     const select_color = useRef(selectedColor);
-    const brush_size = useRef(10 / 10);
+    const brush_size = useRef(20 / 10);
     const edit_mode = useRef(editMode)
     const { currentPage, goToPage } = usePageNavigation();
     const isOnPage = useRef(false);
 
     useEffect(() => {
         select_color.current = selectedColor;
-        brush_size.current = 10 / 10;
+        brush_size.current = 20 / 10;
         edit_mode.current = editMode
     }, [selectedColor, brushSize, editMode]);
     // setSharedGraphics(graphicsRef.current); // 傳遞給父組件
@@ -76,16 +76,18 @@ const ColorCanva = ({ setSharedColorGraphics, selectedColor, brushSize, editMode
 
 
             const calculateCanvasSize = () => {
-                const windowHeight = window.innerHeight * 4 / 6;
+                // const windowHeight = window.innerHeight * 4 / 6;
+                // console.log(maxCanvasHeight, 'maxCanvasHeight')
                 const aspectRatio = bgImage.width / bgImage.height;
-                canvasHeight = windowHeight;
-                canvasWidth = windowHeight * aspectRatio;
+                canvasHeight = maxCanvasHeight;
+                canvasWidth = maxCanvasHeight * aspectRatio;
+                // console.log(canvasWidth, canvasHeight, 'canvasWidth, canvasHeight')
             };
 
             const getScaledMouse = () => {
                 return {
-                    x: p.mouseX / 4,
-                    y: p.mouseY / 4
+                    x: p.mouseX / 2,
+                    y: p.mouseY / 2
                 };
             };
 
@@ -99,30 +101,17 @@ const ColorCanva = ({ setSharedColorGraphics, selectedColor, brushSize, editMode
                 //初始化繪圖圖層
                 calculateCanvasSize();
                 p.pixelDensity(1);
-                let adjustedWidth = Math.floor(canvasWidth) - (Math.floor(canvasWidth) % 4);
-                let adjustedHeight = Math.floor(canvasHeight) - (Math.floor(canvasHeight) % 4);
+                let adjustedWidth = Math.floor(canvasWidth) - (Math.floor(canvasWidth) % 2);
+                let adjustedHeight = Math.floor(canvasHeight) - (Math.floor(canvasHeight) % 2);
 
-                let resultWidth = adjustedWidth / 4;
-                let resultHeight = adjustedHeight / 4;
+                let resultWidth = adjustedWidth / 2;
+                let resultHeight = adjustedHeight / 2;
                 const canvas = p.createCanvas(resultWidth, resultHeight);
                 canvas.parent(canvasRef.current);
                 setSharedColorGraphics(p); // 傳遞給父組件
 
 
-                // colorPicker = p.createColorPicker("#ed225dff");
-                // colorPicker.position(0, p.height + 5);
-                // sliderDrops = p.createSlider(5, 100, 20);
-                // sliderDrops.position(70, p.height + 5);
-                // buttonDry = p.createButton("Dry All");
-                // buttonDry.position(210, p.height + 5);
-                // buttonWet = p.createButton("Keep Wet");
-                // buttonWet.position(270, p.height + 5);
-                // buttonDefault = p.createButton("Default Dry");
-                // buttonDefault.position(350, p.height + 5);
-                // state = p.createElement("state", "Default");
-                // state.position(450, p.height + 5);
-
-                // state.html("Default");
+            
 
                 for (let x = 0; x < p.width; x++) {
                     for (let y = 0; y < p.height; y++) {
@@ -405,7 +394,7 @@ const ColorCanva = ({ setSharedColorGraphics, selectedColor, brushSize, editMode
                         if (paint[idx] === 0 && paint[idx + 1] === 0 && paint[idx + 2] === 0) {
                             p.pixels[idx + 3] = 0;
                         } else {
-                            p.pixels[idx + 3] = p.pixels[idx + 3] * 1; //透明度
+                            p.pixels[idx + 3] = p.pixels[idx + 3] * 0.75; //透明度
                         }
                     }
                 }
@@ -421,9 +410,9 @@ const ColorCanva = ({ setSharedColorGraphics, selectedColor, brushSize, editMode
         return () => {
             p5InstanceRef.current?.remove();
         };
-    }, [selectImage]);
+    }, [selectImage, maxCanvasHeight]);
 
-    return <div ref={canvasRef} id='inkWashPainting' className='absolute ' />;
+    return <div ref={canvasRef} id='inkWashPainting' className='absolute opacity-0' />;
 };
 
 export default ColorCanva;

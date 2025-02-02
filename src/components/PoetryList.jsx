@@ -6,12 +6,12 @@ import { useImageContext } from '../contexts/ImageContext';
 // 唐詩數據庫
 
 
-const PoetryList = () => {
+const PoetryList = ({ setPrompt }) => {
     const { selectPoetry, setSelectPoetry } = useSelectPoetryContext();
     const [currentPoem, setCurrentPoem] = useState(TANG_POEMS[0]);
-    const { prompt, setPrompt } = useImageContext();
+    // const { prompt, setPrompt } = useImageContext();
     return (
-        <div className="container mx-auto p-4">
+        <div className="w-full ">
             <h1 className="font-bold mb-6 text-center text-6xl">唐詩集</h1>
 
 
