@@ -2,14 +2,19 @@
 import { useState, useCallback, useEffect } from 'react';
 // import sharp from 'sharp';
 import { Image } from 'image-js';
+// import { VITE_WS_URL } from '../env';
+const WS_URL = process.env.REACT_APP_WS_URL
+
 // interface UseWebSocketImageGeneratorProps {
 //   clientId?: string;
 //   wsUrl?: string;
 // }
 
+
+
 export const useWebSocketImageGenerator = ({
   clientId = 'testId2',
-  wsUrl = 'ws://localhost:8188/ws'
+  wsUrl = WS_URL
 } = {}) => {
   const [socket, setSocket] = useState (null);
   const [isConnected, setIsConnected] = useState(false);

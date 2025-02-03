@@ -15,12 +15,12 @@ const PoetryList = () => {
       <Card >
         <CardHeader className='text-5xl justify-center gap-6'>
           {selectPoetry.title}
-          <p className="text-gray-600">作者：{selectPoetry.poet}</p>
+          <p >作者：{selectPoetry.poet}</p>
         </CardHeader>
         <CardBody className='[writing-mode:vertical-rl] text-5xl/loose tracking-[1rem] justify-center '>
-          <pre className="whitespace-pre-wrap font-sans">
+          <p className="whitespace-pre-wrap ">
             {selectPoetry.content}
-          </pre>
+          </p>
         </CardBody>
         {/* <Button color="primary">Primary</Button>className='bg-blue-500 w-full' */}
       </Card>

@@ -23,24 +23,35 @@ const ImageSelectArea = () => {
     // console.log(images,'    images');
 
     return (
-        <div className="image-select-area w-full h-full p-2 grid grid-cols-2 gap-6">
+        <div className="image-select-area w-full flex-1 grid grid-cols-2 gap-4">
             {images.map((image, index) => (
-                <div key={index} className="aspect-square"> {/* 新增外層容器 */}
-                    <Image
-                        alt="HeroUI hero Image"
+                <div key={index} className="relative w-full h-full ">
+                    <img
                         src={image}
-                        className="w-full h-full object-cover" // 修改這裡
+                        alt={`Image ${index + 1}`}
+                        className="absolute w-full h-full object-contain"
                         onClick={() => {
                             setSelectImage(image)
-                            // p5InkInstance.current?.saveCanvasToBuffer()
                             goToPage(1)
                             console.log(image, 'image')
                         }}
                     />
                 </div>
             ))}
+
         </div>
     );
 };
 
 export default ImageSelectArea;
+
+// <Image
+//                         alt="HeroUI hero Image"
+//                         src={image}
+//                         className="absolute w-full h-full object-contain"
+//                         onClick={() => {
+//                             setSelectImage(image)
+//                             goToPage(1)
+//                             console.log(image, 'image')
+//                         }}
+//                     />
