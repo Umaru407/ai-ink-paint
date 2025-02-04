@@ -2,7 +2,7 @@
     "rewrites": [
       {
         "source": "/api/:path*",
-        "destination": "http://umarucomfyui.ddns.net/api/:path*"
+        "destination": "http://umarucomfyui.ddns.net:8188/api/:path*"
       }
     ]
   }
