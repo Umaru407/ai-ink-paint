@@ -8,11 +8,11 @@ import { useP5Color } from '../contexts/p5ColorContext';
 
 const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedColorGraphics, editMode }) => {
     const canvasRef = useRef(null);
-    const { currentPage, goToPage } = usePageNavigation();
+
     const { p5PaintInstance, setPaintImageData, paintImageData } = useP5Paint()
     const { p5ColorInstance, setColorImageData, colorImageData } = useP5Color()
     const p5InstanceRef = useRef(null);
-    const isOnPage = useRef(false);
+
     const edit_mode = useRef(editMode)
     useEffect(() => {
         edit_mode.current = editMode
@@ -22,8 +22,10 @@ const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedCol
     // const { p5PaintInstance, setPaintImageData } = useP5Paint()
     const { inkImageData } = useP5Ink()
 
+    const { currentPage } = usePageNavigation();
+    const isOnPage = useRef(false);
     useEffect(() => {
-        isOnPage.current = currentPage === 4;
+        isOnPage.current = currentPage === 5;
 
         if (!isOnPage.current) {
             p5InstanceRef.current?.noLoop()
@@ -80,7 +82,7 @@ const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedCol
             const calculateCanvasSize = () => {
                 // const windowHeight = window.innerHeight * 4 / 6;
                 // console.log(maxCanvasHeight, 'maxCanvasHeight')
-                const aspectRatio =  bgImage.height/bgImage.width ;
+                const aspectRatio = bgImage.height / bgImage.width;
                 canvasWidth = maxCanvasWidth;
                 canvasHeight = maxCanvasWidth * aspectRatio;
                 // canvasHeight = maxCanvasHeight;
@@ -99,7 +101,7 @@ const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedCol
                 // Dimensions
                 w = inkImage.width / scale
                 h = inkImage.height / scale
-                console.log(w, h, 'w, h')
+                // console.log(w, h, 'w, h')
                 // x - sharedGraphics.width / scale, y, w + sharedGraphics.width / scale, sharedGraphics.height / scale + sharedGraphics.height / scale / 2
                 // editSize.x = x - sharedGraphics.width / scale;
                 // editSize.y = y;
@@ -243,12 +245,12 @@ const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedCol
                 dragging = false;
                 resizing = false;
                 // 當鼠標釋放時，將當前筆劃保存到 strokes 數組中
-                console.log('release reszing')
+                // console.log('release reszing')
 
             };
 
             p.touchStarted = () => {
-                console.log('touchstart')
+                // console.log('touchstart')
 
                 // console.log('mousepress')
                 // Check if mouse is over the resize handle
@@ -297,7 +299,7 @@ const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedCol
         return () => {
             p5InstanceRef.current?.remove();
         };
-    }, [colorImageData, sharedColorGraphics, maxCanvasHeight]);
+    }, [colorImageData]);
 
     return <div ref={canvasRef} />;
 };

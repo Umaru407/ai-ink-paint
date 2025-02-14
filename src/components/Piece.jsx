@@ -21,10 +21,15 @@ const Piece = ({ image }) => {
                 let img, img2
 
                 const calculateCanvasSize = () => {
-                    const windowHeight = window.innerHeight * 5.5 / 6;
+                    const container = document.getElementById('piece-container');
+                    const containerHeight = container ? container.offsetHeight : window.innerHeight * 4 / 6;
                     const aspectRatio = img.width / img.height;
-                    canvasHeight = windowHeight;
-                    canvasWidth = windowHeight * aspectRatio;
+                    canvasHeight = containerHeight;
+                    canvasWidth = containerHeight * aspectRatio;
+                    // const windowHeight = window.innerHeight * 4 / 6;
+                    // const aspectRatio = img.width / img.height;
+                    // canvasHeight = windowHeight;
+                    // canvasWidth = windowHeight * aspectRatio;
                 };
 
 
@@ -54,8 +59,8 @@ const Piece = ({ image }) => {
                     if (img2) {
                         // 計算 img2 的縮放尺寸（保持原比例）
                         const scale = Math.min(
-                            p.width / img2.width * 0.8,
-                            p.height / img2.height * 0.8
+                            p.width / img2.width * 0.75,
+                            p.height / img2.height * 0.75
                         );
 
                         const newWidth = img2.width * scale;
@@ -129,7 +134,7 @@ const Piece = ({ image }) => {
 
 
     return (
-        <div ref={canvasRef} id='piece-container' className="paper flex flex-col justify-center items-center flex-grow ">
+        <div ref={canvasRef} id='piece-container' className="paper flex-1 flex flex-col justify-center items-center">
 
         </div>
     );

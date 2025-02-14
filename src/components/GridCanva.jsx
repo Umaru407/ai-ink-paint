@@ -1,5 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import p5 from 'p5';
+import { usePageNavigation } from '../contexts/PageContext';
+
+
+
 
 const GridCanva = ({ canvasWidth, canvasHeight, showGrid }) => {
     const GRID_COLS = 4;
@@ -15,6 +19,19 @@ const GridCanva = ({ canvasWidth, canvasHeight, showGrid }) => {
         }
     }, [showGrid]);
 
+    const { currentPage } = usePageNavigation();
+    const isOnPage = useRef(false);
+    useEffect(() => {
+        isOnPage.current = currentPage === 2;
+
+        if (!isOnPage.current) {
+            p5InstanceRef.current?.noLoop()
+        } else {
+            p5InstanceRef.current?.loop()
+        }
+
+    }, [currentPage]);
+
     useEffect(() => {
         if (typeof window !== 'undefined' && canvasRef.current) {
             const sketch = (p) => {
@@ -26,7 +43,7 @@ const GridCanva = ({ canvasWidth, canvasHeight, showGrid }) => {
                     canvas.parent(canvasRef.current);
                     p.noLoop();
                     console.log(canvas.width, canvas.height, '234')
-                    console.log(p,p.canvas.width, p.canvas.height, 'p.canvas')
+                    console.log(p, p.canvas.width, p.canvas.height, 'p.canvas')
                 };
 
                 p.draw = () => {
@@ -81,13 +98,14 @@ const GridCanva = ({ canvasWidth, canvasHeight, showGrid }) => {
                         // 對角線（左上到右下，右上到左下）
                         p.line(x1, y1, x2, y2); // 左上到右下
                         p.line(x2, y1, x1, y2); // 右上到左下
-                    }}
-                };
+                    }
+                }
+            };
 
-                p5InstanceRef.current = new p5(sketch);
-                return () => p5InstanceRef.current?.remove();
-            }
-        }, [canvasWidth]);
+            p5InstanceRef.current = new p5(sketch);
+            return () => p5InstanceRef.current?.remove();
+        }
+    }, [canvasWidth]);
 
     return <div ref={canvasRef} className="canvas-container absolute" />;
 };

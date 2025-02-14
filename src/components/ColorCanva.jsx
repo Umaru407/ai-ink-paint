@@ -30,7 +30,7 @@ const ColorCanva = ({ maxCanvasHeight,setSharedColorGraphics, selectedColor, bru
     let canvasHeight
 
     useEffect(() => {
-        isOnPage.current = currentPage === 3;
+        isOnPage.current = currentPage === 4;
 
         if (!isOnPage.current) {
             p5InstanceRef.current?.noLoop()
@@ -129,22 +129,11 @@ const ColorCanva = ({ maxCanvasHeight,setSharedColorGraphics, selectedColor, bru
                 // console.log('水墨draw')
                 // 获取缩放后的鼠标坐标
                 let currentMouse = getScaledMouse();
-                // console.log(prevMouseX, prevMouseY, currentMouse)
-
-                // buttonDry.mousePressed(dry);
-                // buttonWet.mousePressed(wet);
-                // buttonDefault.mousePressed(defaultDry);
-                // paintDrop = sliderDrops.value();
-
-
-                // colorPicked = colorPicker.color();
-                // console.log(select_color.current, 'color')
                 colorPicked = p.color(select_color.current);
                 // console.log(colorPicked,colorPicker)
                 // console.log(edit_mode.current)
 
                 if (isDrawing && p.mouseX >= 0 && p.mouseX <= canvasWidth && p.mouseY >= 0 && p.mouseY <= canvasHeight && !edit_mode.current) {
-                    // console.log('addPaint')
                     addPaint(currentMouse);
                 }
 
@@ -376,6 +365,8 @@ const ColorCanva = ({ maxCanvasHeight,setSharedColorGraphics, selectedColor, bru
                         }
                     }
                 }
+
+                // console.log(paint, 'paint',tempPaint1,tempPaint2)
             };
 
 

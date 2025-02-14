@@ -9,7 +9,7 @@ import { PageProvider, usePageNavigation } from './contexts/PageContext';
 
 import { P5InkProvider } from './contexts/p5InkContext';
 import { P5PaintProvider } from './contexts/p5PaintContext';
-import Complelte_Page from './pages/Complete_Page';
+import Page3 from './pages/Page3';
 import { P5SignProvider } from './contexts/p5SignContext';
 import Calligraphy_Page from './pages/Calligraphy_Page';
 import { HeroUIProvider } from "@heroui/react";
@@ -74,7 +74,7 @@ export default function Home() {
     <Select_Paint_Page />,
     <PaintPage />,
     <StampPage />,
-    <Complelte_Page />,
+    <Page3 />,
 
 
   ];

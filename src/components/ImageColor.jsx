@@ -25,7 +25,7 @@ const ImageColor = ({ maxCanvasHeight, sharedGraphics, sharedColorGraphics, edit
     const { inkImageData } = useP5Ink()
 
     useEffect(() => {
-        isOnPage.current = currentPage === 3;
+        isOnPage.current = currentPage === 4;
 
         if (!isOnPage.current) {
             p5InstanceRef.current?.noLoop()
@@ -95,6 +95,7 @@ const ImageColor = ({ maxCanvasHeight, sharedGraphics, sharedColorGraphics, edit
             };
 
             p.draw = () => {
+                console.log('imagecolor draw')
                 // console.log(edit_mode.current)
                 p.clear()
                 p.image(bgImage, 0, 0, canvasWidth, canvasHeight);
@@ -102,25 +103,15 @@ const ImageColor = ({ maxCanvasHeight, sharedGraphics, sharedColorGraphics, edit
                 p.blendMode(p.SOFT_LIGHT);
 
 
+
                 if (sharedColorGraphics) {
                     try {
                         p.image(sharedColorGraphics, 0, 0, canvasWidth, canvasHeight);
                     } catch (error) {
                         console.log(error, 'error')
-                        console.log(sharedColorGraphics, 'sharedColorGraphics', canvasWidth, canvasHeight)
+                        // console.log(sharedColorGraphics, 'sharedColorGraphics', canvasWidth, canvasHeight)
                     }
                 }
-
-                // try {
-                //     p.image(sharedColorGraphics, 0, 0, canvasWidth, canvasHeight);
-                // } catch (error) {
-                //     console.log(error, 'error')
-                //     console.log(sharedColorGraphics, 'sharedColorGraphics', canvasWidth, canvasHeight)
-                // }
-
-                // // console.log(sharedColorGraphics, 'sharedColorGraphics', canvasWidth, canvasHeight)
-                // //test
-                // p.image(sharedColorGraphics, 0, 0, canvasWidth, canvasHeight);
                 p.blendMode(p.BLEND);
 
 

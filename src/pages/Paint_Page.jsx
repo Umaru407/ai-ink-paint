@@ -116,7 +116,7 @@ export default function PaintPage() {
     const [brushSize, setBrushSize] = useState(20);
     const [editMode, setEditMode] = useState(false)
     return (
-        <div className="paper-container flex flex-col h-full justify-between">
+        <div className="paper-container flex flex-col h-full  p-8">
             <div className='px-8 flex flex-col flex-1'>
                 <div className='flex gap-6 flex-1 justify-center' >
                     <div className='h-full flex flex-col  '>

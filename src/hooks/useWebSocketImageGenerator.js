@@ -13,13 +13,13 @@ const WS_URL = process.env.REACT_APP_WS_URL
 
 
 export const useWebSocketImageGenerator = ({
-  clientId = 'testId2',
+  clientId = crypto.randomUUID(),
   wsUrl = WS_URL
 } = {}) => {
-  const [socket, setSocket] = useState (null);
+  const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [error, setError] = useState (null);
-  const [imageUrl, setImageUrl] = useState (null);
+  const [error, setError] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
   const connectWebSocket = useCallback(async ({ prompt, api }) => {
     try {
@@ -64,7 +64,7 @@ export const useWebSocketImageGenerator = ({
           // const outputBlob = new Blob([outputBuffer], { type: 'image/png' });
 
           // 使用 URL.createObjectURL 生成新 URL
-          const outputURL =greyImage.toDataURL();
+          const outputURL = greyImage.toDataURL();
           // console.log('Processed Image URL:', outputURL);
           setImageUrl(outputURL);
 

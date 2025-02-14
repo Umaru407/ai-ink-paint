@@ -15,14 +15,14 @@ import { usePageNavigation } from '../contexts/PageContext';
 const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
     const { recognizeStrokes, setRecognizeStrokes, buttons, setButtons } = useImageContext();
     const strokeMax = 16;
-    const { currentPage, goToPage } = usePageNavigation();
+    const { currentPage } = usePageNavigation();
     const isOnPage = useRef(false);
 
 
-    console.log(canvasWidth, canvasHeight, 'canvasWidth, canvasHeight!!!')
+    // console.log(canvasWidth, canvasHeight, 'canvasWidth, canvasHeight!!!')
 
     useEffect(() => {
-        isOnPage.current = currentPage === 1;
+        isOnPage.current = currentPage === 2;
 
         if (!isOnPage.current) {
             p5InstanceRef.current?.noLoop()
@@ -315,7 +315,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                     const dataUrl = buffer.elt.toDataURL("image/png");
                     //show image in blank website
                     // window.open(dataUrl, '_blank');
-                    console.log(dataUrl, 'dataUrl')
+                    // console.log(dataUrl, 'dataUrl')
                     setInkImageData(dataUrl);
                 };
             };

@@ -37,7 +37,7 @@ export default function Calligraphy_Page() {
 
 
     return (
-        <div className='flex flex-col h-full p-4'>
+        <div className='flex flex-col h-full p-8'>
             <Text type='title'>書法練習</Text>
             <Poetry />
             <div ref={containerRef} className="flex-1 w-full self-center flex justify-center m-6">

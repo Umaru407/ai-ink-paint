@@ -27,7 +27,7 @@ export default function Select_Poetry_Page() {
     const { goToPage } = usePageNavigation();
     return (
         // 1024px
-        <div className='flex flex-col h-full px-8 '>
+        <div className='flex flex-col p-8 '>
 
             <PoetryList setPrompt={setPrompt} />
             <Poetry />

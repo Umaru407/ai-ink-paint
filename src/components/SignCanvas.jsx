@@ -33,7 +33,7 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
 
 
     useEffect(() => {
-        isOnPage.current = currentPage === 4;
+        isOnPage.current = currentPage === 5;
 
         if (!isOnPage.current) {
             p5InstanceRef.current?.noLoop()
