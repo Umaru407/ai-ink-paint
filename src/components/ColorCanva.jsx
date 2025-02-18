@@ -13,14 +13,14 @@ const ColorCanva = ({ maxCanvasHeight,setSharedColorGraphics, selectedColor, bru
 
     const p5InstanceRef = useRef(null);
     const select_color = useRef(selectedColor);
-    const brush_size = useRef(20 / 10);
+    const brush_size = useRef(brushSize / 10);
     const edit_mode = useRef(editMode)
     const { currentPage, goToPage } = usePageNavigation();
     const isOnPage = useRef(false);
 
     useEffect(() => {
         select_color.current = selectedColor;
-        brush_size.current = 20 / 10;
+        brush_size.current = brushSize / 10;
         edit_mode.current = editMode
     }, [selectedColor, brushSize, editMode]);
     // setSharedGraphics(graphicsRef.current); // 傳遞給父組件

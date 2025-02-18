@@ -30,13 +30,24 @@ import { useP5Color } from '../contexts/p5ColorContext';
 const colors = [
     '#9d2933', '#f36838', '#ffb61e', '#16a951', '#1685a9', '#003472',
     '#ff4777', '#FFA07A', '#c89b40', '#549688', '#20B2AA', '#30dff3',
-    '#8d4bbb', '#815476', '#845a33', '#778899', '#fff2df', '#E9E7EF'
+    '#8d4bbb', '#815476', '#845a33', '#50616d',  '#778899', '#fff2df'
 
 ];
 
 const brushSizes = [
-    20, 40, 60, 80
-]
+    {
+        size: 20,
+        tag: '小'
+    },
+    {
+        size: 40,
+        tag: '中'
+    },
+    {
+        size: 60,
+        tag: '大'
+    }
+    ]
 
 function ColorPalette({ setSelectedColor }) {
     return (
@@ -55,17 +66,18 @@ function ColorPalette({ setSelectedColor }) {
 
 function BrushSizeSlector({ selectedColor, setBrushSize }) {
     return (
-        <div className='grid grid-cols-2 gap-4  place-items-center' >
+        <div className='flex-1 flex flex-col gap-12 justify-center items-center' >
             {
                 brushSizes.map((size, index) => (
                     <div key={index}
-                        className='border-white w-full h-full flex items-center justify-center'
+                        className='border-white  flex items-center justify-center w-16 h-16 bg-white'
+                        onClick={() => {
+                            // console.log('size', size)
+                            setBrushSize(size.size)
+                        }}
                     >
-                        <div className='rounded-full flex items-center justify-center' style={{ backgroundColor: selectedColor, width: `${size}px`, height: `${size}px` }}
-                            onClick={() => {
-                                console.log('size', size)
-                                setBrushSize(size)
-                            }}>{size}</div>
+                        <div className='rounded-full flex items-center justify-center' style={{ backgroundColor: selectedColor, width: `${size.size}px`, height: `${size.size}px` }}
+                            >{size.tag}</div>
                     </div>
                 ))
             }
@@ -133,16 +145,24 @@ export default function PaintPage() {
                     </div> */}
                 </div>
 
+                
 
-                <div className='mx-12  my-6 flex flex-col justify-end '>
 
-                    <Text type="subtitle">顏彩</Text>
-                    <ColorPalette setSelectedColor={setSelectedColor} />
+                <div className='mx-6 my-6 flex gap-12'>
+
+                        <div className='flex flex-col'>
+                        <Text type="subtitle">筆刷</Text>
+                        <BrushSizeSlector selectedColor={selectedColor} setBrushSize={setBrushSize} />
+                        </div>
+                        <div className='flex flex-col flex-1'>
+                            <Text type="subtitle">顏彩</Text>
+                            <ColorPalette setSelectedColor={setSelectedColor} />
+                        </div>
                 </div>
 
             </div>
 
-            <div className="px-8 pb-4 ">
+            <div className="px-8 shrink">
                 <DoneButton />
             </div>
         </div>

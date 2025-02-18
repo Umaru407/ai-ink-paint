@@ -1,20 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelectImageContext } from '../contexts/SelectImageContext';
-import p5 from 'p5';
-import ImageColor from '../components/ImageColor';
-import TestFabric from '../components/TestFabric';
+import React, { useEffect,  useState } from 'react';
 import { useP5Paint } from '../contexts/p5PaintContext';
-import { usePageNavigation } from '../contexts/PageContext';
 import Piece from '../components/Piece';
 import Text from '../components/Text';
 import { Skeleton } from '@heroui/react';
 
 
-function ImageQRCode({ canvas, imageData }) {
+function ImageQRCode({  imageData }) {
     const [qrUrl, setQrUrl] = useState('');
     // const [isLoading, setIsLoading] = useState(true);
 
-    console.log(imageData, 'imageData')
+    // console.log(imageData, 'imageData')
 
     useEffect(() => {
         if (!imageData) return;
