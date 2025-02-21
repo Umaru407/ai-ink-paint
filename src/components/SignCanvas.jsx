@@ -381,7 +381,7 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
 
     return (
         <div className="paper flex flex-col justify-center items-center h-full">
-            <div ref={canvasRef} className="canvas-container w-full h-[680px] flex items-center justify-center bg-white" ></div>
+            <div ref={canvasRef} className="canvas-container w-full h-[600px] flex items-center justify-center bg-white" ></div>
             <div className="canvas-controls flex flex-col mt-12">
                 <div>
                     <Button fullWidth onPress={clearCanvas} size='lg' color="primary">
