@@ -82,7 +82,7 @@ export default function StampPage() {
                     
                 </div>
 
-                <div className='mx-12  my-6 flex flex-col justify-end '>
+                <div className='mx-12 my-6 flex flex-col justify-end shrink'>
                     <Text type="subtitle">落款樣式</Text>
                     <StampSelector stamp={stamp} setStamp={setStamp} />
                 </div>
@@ -102,7 +102,7 @@ function StampSelector({ stamp, setStamp }) {
     const { p5SignInstance } = useP5Sign()
     const stampStyles = useStampStyles()
     return (
-        <div className="grid grid-cols-3 gap-4 mt-4">
+        <div className="grid grid-cols-4 gap-4 mt-4">
             {stampStyles.map((s) => (
                 <div
                     key={s.id}
@@ -123,7 +123,7 @@ function StampSelector({ stamp, setStamp }) {
                         <img
                             src={s.image}
                             alt={s.name}
-                            className="w-20 h-20 mx-auto object-contain"
+                            className="w-20 h-16 mx-auto object-contain"
                         />
                     </div>
                     {/* <Text type="body">{s.name}</Text> */}
