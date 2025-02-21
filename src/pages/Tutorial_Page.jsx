@@ -95,12 +95,15 @@ const TutorialPage = () => {
                                     {tutorial.description}
                                 </Text>
 
-                                <Button className='mt-4' fullWidth onPress={() => {
-
-                                    goToPage(1)
-                                }}>
-                                    <Text type="heading" >開始作品</Text>
-                                </Button>
+                                {
+                                    index === tutorials.length - 1 && (
+                                        <Button className='mt-4' fullWidth onPress={() => goToPage(1)}>
+                                            <Text type="heading">開始作品</Text>
+                                        </Button>
+                                    )
+                                }
+                        
+                               
 
 
 
