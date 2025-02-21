@@ -1,6 +1,7 @@
 // hooks/useWebSocketImageGenerator.ts
 import { useState, useCallback, useEffect } from 'react';
 // import sharp from 'sharp';
+import { useImageContext } from '../contexts/ImageContext';
 import { Image } from 'image-js';
 // import { VITE_WS_URL } from '../env';
 const WS_URL = process.env.REACT_APP_WS_URL
@@ -20,6 +21,7 @@ export const useWebSocketImageGenerator = ({
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const { images, setImages, prompt, setPrompt } = useImageContext();
 
   const connectWebSocket = useCallback(async ({ prompt, api }) => {
     try {
@@ -65,8 +67,11 @@ export const useWebSocketImageGenerator = ({
 
           // 使用 URL.createObjectURL 生成新 URL
           const outputURL = greyImage.toDataURL();
-          // console.log('Processed Image URL:', outputURL);
-          setImageUrl(outputURL);
+          console.log('Processed Image URL:', outputURL);
+
+          setImages(prevImages => [...prevImages, outputURL]);
+
+          // setImageUrl(outputURL);
 
 
 

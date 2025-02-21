@@ -32,6 +32,8 @@ export const GenerateButton = () => {
     if (imageUrl) {
       setImages([...images, imageUrl]);
     }
+
+    console.log("rrrrrrrrrrrrr",imageUrl)
   }, [imageUrl])
 
   return (

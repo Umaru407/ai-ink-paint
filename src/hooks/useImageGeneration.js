@@ -14,11 +14,12 @@ export const useImageGeneration = () => {
     generateImage
   } = useWebSocketImageGenerator();
 
-  useEffect(() => {
-    if (imageUrl) {
-      setImages(prevImages => [...prevImages, imageUrl]);
-    }
-  }, [imageUrl, setImages]);
+  // useEffect(() => {
+  //   if (imageUrl) {
+  //     setImages(prevImages => [...prevImages, imageUrl]);
+  //     console.log('rrrrrr2r,',imageUrl)
+  //   }
+  // }, [imageUrl]);
 
   const generateNewImage = async () => {
     const api = ink_paint_v2;
