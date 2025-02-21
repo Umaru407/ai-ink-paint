@@ -86,11 +86,13 @@ export default function StampPage() {
                     <Text type="subtitle">落款樣式</Text>
                     <StampSelector stamp={stamp} setStamp={setStamp} />
                 </div>
-            </div>
 
-            <div className="px-8 shrink">
                 <DoneButton />
             </div>
+
+            {/* <div className="px-8 shrink">
+                
+            </div> */}
         </div>
     );
 }
