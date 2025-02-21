@@ -75,24 +75,22 @@ export default function StampPage() {
                         </div>
                     </div>
 
-                    <div>
+                   
 
                         {/* <StampBackgroundCanvas selectedStamp={selectedStamp} /> */}
                         <SignCanvas selectedStamp={stamp} setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} editMode={editMode} setEditMode={setEditMode} />
-                    </div>
+                    
                 </div>
 
                 <div className='mx-12  my-6 flex flex-col justify-end '>
                     <Text type="subtitle">落款樣式</Text>
                     <StampSelector stamp={stamp} setStamp={setStamp} />
                 </div>
-
-                <DoneButton />
             </div>
 
-            {/* <div className="px-8 shrink">
-                
-            </div> */}
+            <div className="px-8 shrink">
+                <DoneButton />
+            </div>
         </div>
     );
 }
