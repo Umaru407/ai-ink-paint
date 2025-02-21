@@ -2,11 +2,14 @@ import React from 'react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Text from '../components/Text';
+import Button from '../components/Button';
+import { usePageNavigation } from '../contexts/PageContext';
 
 const TutorialPage = () => {
     const tutorials = [{
@@ -38,6 +41,8 @@ const TutorialPage = () => {
 
 
     ];
+
+    const { goToPage } = usePageNavigation();
 
     return (
         <div className='w-full h-full p-32'>
@@ -90,7 +95,12 @@ const TutorialPage = () => {
                                     {tutorial.description}
                                 </Text>
 
+                                <Button className='mt-4' fullWidth onPress={() => {
 
+                                    goToPage(1)
+                                }}>
+                                    <Text type="heading" >開始作品</Text>
+                                </Button>
 
 
 
@@ -100,12 +110,12 @@ const TutorialPage = () => {
                     ))}
                 </Swiper>
 
-                <div className='swiper-button-next1 absolute top-1/2 right-4 z-10 cursor-pointer w-6 h-6'>
+                {/* <div className='swiper-button-next1 absolute top-1/2 right-4 z-10 cursor-pointer w-6 h-6'>
                     111
                 </div>
                 <div className='swiper-button-prev1 absolute top-1/2 left-4 z-10 cursor-pointer w-6 h-6'>
                     222
-                </div>
+                </div> */}
             </div>
         </div>
     );
