@@ -83,18 +83,12 @@ export default function StampPage() {
                 </div>
 
                 <div className='mx-12  my-6 flex flex-col justify-end '>
-
                     <Text type="subtitle">落款樣式</Text>
                     <StampSelector stamp={stamp} setStamp={setStamp} />
-
                 </div>
-
-
-
-
             </div>
 
-            <div className="px-8 pb-4 ">
+            <div className="px-8 shrink">
                 <DoneButton />
             </div>
         </div>
