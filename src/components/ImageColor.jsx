@@ -5,7 +5,7 @@ import { useP5Color } from '../contexts/p5ColorContext';
 import { useP5Ink } from '../contexts/p5InkContext';
 import { useSelectImageContext } from '../contexts/SelectImageContext';
 
-const ImageColor = ({ maxCanvasHeight, sharedGraphics, sharedColorGraphics, editMode }) => {
+const ImageColor = ({ maxCanvasHeight, sharedColorGraphics, editMode }) => {
     const canvasRef = useRef(null);
     const { currentPage, goToPage } = usePageNavigation();
     // console.log(useP5Color(), 'useP5Color')
@@ -36,8 +36,10 @@ const ImageColor = ({ maxCanvasHeight, sharedGraphics, sharedColorGraphics, edit
     }, [currentPage]);
 
     useEffect(() => {
+        console.log('@@@@@@@@@@@@@@')
 
-        if (!selectImage) return;
+        if (!selectImage && !p5InstanceRef.current) return;
+        console.log('@@@@@@@@@@@@@@222')
         // if (p5InstanceRef.current) {
         //     p5InstanceRef.current.remove();
         // }
@@ -95,7 +97,7 @@ const ImageColor = ({ maxCanvasHeight, sharedGraphics, sharedColorGraphics, edit
             };
 
             p.draw = () => {
-                // console.log('imagecolor draw')
+                console.log('imagecolor draw')
                 // console.log(edit_mode.current)
                 p.clear()
                 p.image(bgImage, 0, 0, canvasWidth, canvasHeight);
@@ -134,7 +136,7 @@ const ImageColor = ({ maxCanvasHeight, sharedGraphics, sharedColorGraphics, edit
         return () => {
             p5InstanceRef.current?.remove();
         };
-    }, [selectImage]);
+    }, [sharedColorGraphics, maxCanvasHeight]);
 
     return <div ref={canvasRef} />;
 };
