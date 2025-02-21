@@ -11,6 +11,10 @@ const ImageSelectArea = () => {
     const { p5InkInstance, inkImageData, setInkImageData } = useP5Ink()
 
     useEffect(() => {
+        console.log('圖片數量:', images.length);
+    }, [images])
+
+    useEffect(() => {
         setImages(['/一隻熊貓吃竹子_3_灰階.png', '一隻熊貓吃竹子_2_灰階.png', '/白日依山盡黃河入海流_2_灰階.png', '/白日依山盡黃河入海流_3_灰階.png'])
 
 
