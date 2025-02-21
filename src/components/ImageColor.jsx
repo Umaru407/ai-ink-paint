@@ -95,7 +95,7 @@ const ImageColor = ({ maxCanvasHeight, sharedGraphics, sharedColorGraphics, edit
             };
 
             p.draw = () => {
-                console.log('imagecolor draw')
+                // console.log('imagecolor draw')
                 // console.log(edit_mode.current)
                 p.clear()
                 p.image(bgImage, 0, 0, canvasWidth, canvasHeight);

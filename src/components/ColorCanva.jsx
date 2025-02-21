@@ -156,24 +156,25 @@ const ColorCanva = ({ maxCanvasHeight,setSharedColorGraphics, selectedColor, bru
             // }
 
             p.touchStarted = () => {
-                // console.log('start touch')
+                console.log('start touch')
                 isDrawing = true;
             }
 
             p.touchEnded = () => {
-                // console.log('start end')
+                console.log('touch end')
                 isDrawing = false;
                 prevMouseX = undefined;
                 prevMouseY = undefined;
             }
 
             p.mousePressed = () => {
-                // console.log('start mouse')
+                console.log('start mouse')
+                
                 isDrawing = true;
             }
 
             p.mouseReleased = () => {
-                // console.log('start release')
+                console.log('mouse release')
                 isDrawing = false;
                 prevMouseX = undefined;
                 prevMouseY = undefined;
@@ -183,7 +184,9 @@ const ColorCanva = ({ maxCanvasHeight,setSharedColorGraphics, selectedColor, bru
 
 
 
-                if (p.mouseIsPressed) {
+                if (p.mouseIsPressed && isDrawing) {
+
+                    console.log('mosue is presss')
                     // console.log('mouseIsPressed',currentMouse)
                     let mx = p.constrain(currentMouse.x, 0, p.width - 1);
                     let my = p.constrain(currentMouse.y, 0, p.height - 1);
