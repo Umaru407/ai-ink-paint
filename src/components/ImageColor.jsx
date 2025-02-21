@@ -134,7 +134,7 @@ const ImageColor = ({ maxCanvasHeight, sharedGraphics, sharedColorGraphics, edit
         return () => {
             p5InstanceRef.current?.remove();
         };
-    }, [selectImage, sharedColorGraphics, maxCanvasHeight]);
+    }, [selectImage]);
 
     return <div ref={canvasRef} />;
 };
