@@ -69,7 +69,7 @@ export default function StampPage() {
                 <div className='flex gap-6 flex-[3] ' >
 
                     <div className='h-full flex flex-col flex-1'>
-                        <div ref={ColorContainer} className='flex-1 '>
+                        <div ref={ColorContainer} className='flex-1 justify-center'>
                             {/* <ColorCanva maxCanvasHeight={colorDimensions.height} setSharedColorGraphics={setSharedColorGraphics} selectedColor={selectedColor} brushSize={brushSize} editMode={editMode} setEditMode={setEditMode} /> */}
                             <ImageStamp maxCanvasHeight={colorDimensions.height} maxCanvasWidth={colorDimensions.width} editMode={editMode} setEditMode={setEditMode} sharedColorGraphics={sharedColorGraphics} setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} />
                         </div>
