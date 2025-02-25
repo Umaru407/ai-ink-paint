@@ -5,6 +5,7 @@ import ImageSelectArea from '../components/ImageSelectArea';
 import TextRecongnizeArea from '../components/TextRecongnizeArea';
 import { GenerateButton } from '../components/GenerateButton';
 import Poetry from '../components/Poetry';
+import PoetryAppreciation from '../components/PoetryAppreciation';
 
 import { useImageGeneration } from '../hooks/useImageGeneration';
 import { TANG_POEMS } from '../contexts/SelectPoetryContext';
@@ -27,10 +28,11 @@ export default function Select_Poetry_Page() {
     const { goToPage } = usePageNavigation();
     return (
         // 1024px
-        <div className='flex flex-col p-8 '>
+        <div className='flex flex-col px-8 h-full'>
 
             <PoetryList setPrompt={setPrompt} />
-            <div className='my-2'><Poetry /></div>
+            <div className='mt-4'><Poetry /></div>
+            <PoetryAppreciation></PoetryAppreciation>
             <Button color='primary' fullWidth size='lg' onPress={() => {
                 generateNewImage()
                 goToPage(1);
