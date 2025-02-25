@@ -10,15 +10,20 @@ const PoetryList = () => {
 
 
   return (
-    <div className="container mx-auto my-2">
+    <div className="container mx-auto ">
       {/* 詩歌內容 */}
       <Card >
-        <CardHeader className='text-5xl justify-center gap-6'>
-          {selectPoetry.title}
-          <p >作者：{selectPoetry.poet}</p>
-        </CardHeader>
-        <CardBody className='[writing-mode:vertical-rl] text-5xl/loose tracking-[1rem] justify-center '>
-          <p className="whitespace-pre-wrap ">
+        
+        {/* <CardHeader className='text-3xl justify-center gap-6 [writing-mode:tb-rl]'>
+          
+        </CardHeader> */}
+        <CardBody className='[writing-mode:vertical-rl] text-3xl/loose tracking-[8px] text-center justify-center '>
+        <div className='border-2 border-black rounded-lg p-2'>
+        <p className='text-4xl'>{selectPoetry.title}</p>
+        <p className='text-2xl'>{selectPoetry.poet}</p>
+        </div>
+          
+          <p className="whitespace-pre-wrap mt-4">
             {selectPoetry.content}
           </p>
         </CardBody>

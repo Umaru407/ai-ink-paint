@@ -30,7 +30,7 @@ export default function Select_Poetry_Page() {
         <div className='flex flex-col p-8 '>
 
             <PoetryList setPrompt={setPrompt} />
-            <Poetry />
+            <div className='my-2'><Poetry /></div>
             <Button color='primary' fullWidth size='lg' onPress={() => {
                 generateNewImage()
                 goToPage(1);
