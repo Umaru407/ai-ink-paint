@@ -19,7 +19,7 @@ const PoetryList = ({ setPrompt }) => {
 
     return (
         <div className="w-full ">
-            <h1 className="font-bold mb-6 text-center text-6xl">唐詩集</h1>
+            
 
 
             {/* 詩歌列表 */}

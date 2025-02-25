@@ -28,8 +28,8 @@ export default function Select_Poetry_Page() {
     const { goToPage } = usePageNavigation();
     return (
         // 1024px
-        <div className='flex flex-col px-8 h-full'>
-
+        <div className='flex flex-col p-8 h-full'>
+<Text type="title">唐詩集</Text>
             <PoetryList setPrompt={setPrompt} />
             <div className='mt-4'><Poetry /></div>
             <PoetryAppreciation></PoetryAppreciation>

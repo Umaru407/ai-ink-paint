@@ -10,7 +10,7 @@ const PoetryList = () => {
 
 
   return (
-    <div className="container mx-auto ">
+    <div className="w-full mx-auto ">
       {/* 詩歌內容 */}
       <Card >
         
