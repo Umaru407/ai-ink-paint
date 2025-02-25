@@ -80,7 +80,7 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
 
         stampSize.current = {
             width: canvasWidth,
-            height:canvasHeight
+            height: stamp.aspectRatio * canvasWidth
         }
 
 
