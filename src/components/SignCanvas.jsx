@@ -80,7 +80,7 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
 
         stampSize.current = {
             width: canvasWidth,
-            height: stamp.aspectRatio * canvasWidth
+            height:canvasHeight
         }
 
 
@@ -381,7 +381,7 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
 
     return (
         <div className="paper flex flex-col justify-center items-center h-full">
-            <div ref={canvasRef} className="canvas-container w-full h-full flex items-center justify-between bg-white" ></div>
+            <div ref={canvasRef} className="canvas-container w-full h-full flex items-center justify-center bg-white" ></div>
             <div className="canvas-controls flex flex-col">
                 <div>
                     <Button fullWidth onPress={clearCanvas} size='lg' color="primary">
