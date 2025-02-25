@@ -66,26 +66,27 @@ export default function StampPage() {
         <div className="paper-container flex flex-col h-full  p-8">
             <div className='px-8 flex flex-col flex-1'>
                 <Text type="title">落款</Text>
-                <div className='flex gap-6 ' >
-                    <div className='h-full flex flex-col flex-1'>
+                <div className='flex gap-6 flex-[3] ' >
 
+                    <div className='h-full flex flex-col flex-1'>
                         <div ref={ColorContainer} className='flex-1 '>
                             {/* <ColorCanva maxCanvasHeight={colorDimensions.height} setSharedColorGraphics={setSharedColorGraphics} selectedColor={selectedColor} brushSize={brushSize} editMode={editMode} setEditMode={setEditMode} /> */}
                             <ImageStamp maxCanvasHeight={colorDimensions.height} maxCanvasWidth={colorDimensions.width} editMode={editMode} setEditMode={setEditMode} sharedColorGraphics={sharedColorGraphics} setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} />
                         </div>
                     </div>
 
-                   
-
-                        {/* <StampBackgroundCanvas selectedStamp={selectedStamp} /> */}
+                    <div className='w-[320px]'>
                         <SignCanvas selectedStamp={stamp} setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} editMode={editMode} setEditMode={setEditMode} />
-                    
+                    </div>
+
+                       
                 </div>
 
-                <div className='mx-12 my-6 flex flex-col justify-end shrink'>
+                <div className='mx-12 my-6 flex flex-col justify-center flex-[2]'>
                     <Text type="subtitle">落款樣式</Text>
                     <StampSelector stamp={stamp} setStamp={setStamp} />
                 </div>
+
             </div>
 
             <div className="px-8 shrink">
