@@ -22,7 +22,7 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
     // const [mode, setEditMode] = useState(false);
     const { stamp, setStamp } = useP5Sign()
     // let bgImage;
-
+    const strokeMax = 12;
     const { currentPage, goToPage } = usePageNavigation();
     const isOnPage = useRef(false);
 
@@ -49,9 +49,11 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
         distance: 10,
         spring: 0.3,
         friction: 0.5,
-        size: 18,
-        diff: 18 / 8
+        size: strokeMax + 2,
+        diff: strokeMax + 2 / 8
     }
+
+
     const canvasRef = useRef();
     const graphicsRef = useRef(); // 保存 graphics 對象
     const p5InstanceRef = useRef(null);
@@ -103,7 +105,7 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
                 let { distance, spring, friction, size, diff } = setting;
                 let x, y, ax, ay, a, r, f //: number
                 let oldR //: number;
-
+                let isMax = false
                 /* Draw status */
                 let drawing = false;
                 let drawStartTime = undefined; // Timestamp of first interaction
@@ -171,7 +173,16 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
                         ay *= friction;
                         a += p.sqrt(ax * ax + ay * ay) - a;
                         a *= 0.6;
-                        r = size - a;
+                        if (isMax) {
+                            r = size - a;
+
+                        } else {
+                            r = r + 1
+                            diff = r / 8;
+                            if (r >= strokeMax) {
+                                isMax = true
+                            }
+                        }
 
                         for (let i = 0; i < distance; ++i) {
                             const oldX = x;
@@ -191,6 +202,8 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
                         }
                     } else if (f) {
                         ax = ay = f = 0;
+                        isMax = false
+                        r = 0
                     }
 
                     // p.clear()

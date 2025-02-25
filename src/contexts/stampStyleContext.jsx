@@ -11,37 +11,9 @@ const stampStyles = [
         type: 'normal'
     },
     {
-        id: 2,
-        name: 'stamp1_2',
-        image: '/stamps/stamp1_2.png',
-        aspectRatio: 2,
-        type: 'outline'
-    },
-    {
-        id: 3,
-        name: 'stamp1_3',
-        image: '/stamps/stamp1_3.png',
-        aspectRatio: 2,
-        type: 'normal'
-    },
-    {
         id: 4,
         name: 'stamp2_1',
         image: '/stamps/stamp2_1.png',
-        aspectRatio: 2,
-        type: 'normal'
-    },
-    {
-        id: 5,
-        name: 'stamp2_2',
-        image: '/stamps/stamp2_2.png',
-        aspectRatio: 2,
-        type: 'outline'
-    },
-    {
-        id: 6,
-        name: 'stamp2_3',
-        image: '/stamps/stamp2_3.png',
         aspectRatio: 2,
         type: 'normal'
     },
@@ -53,12 +25,31 @@ const stampStyles = [
         type: 'normal'
     },
     {
-        id: 8,
-        name: 'stamp3_2',
-        image: '/stamps/stamp3_2.png',
+        id: 10,
+        name: 'stamp4_1',
+        image: '/stamps/stamp4_1.png',
         aspectRatio: 1,
-        type: 'outline'
+        type: 'normal'
     },
+    
+    {
+        id: 3,
+        name: 'stamp1_3',
+        image: '/stamps/stamp1_3.png',
+        aspectRatio: 2,
+        type: 'normal'
+    },
+    
+   
+    {
+        id: 6,
+        name: 'stamp2_3',
+        image: '/stamps/stamp2_3.png',
+        aspectRatio: 2,
+        type: 'normal'
+    },
+    
+    
     {
         id: 9,
         name: 'stamp3_3',
@@ -66,12 +57,35 @@ const stampStyles = [
         aspectRatio: 1,
         type: 'normal'
     },
+   
+    
     {
-        id: 10,
-        name: 'stamp4_1',
-        image: '/stamps/stamp4_1.png',
+        id: 12,
+        name: 'stamp4_3',
+        image: '/stamps/stamp4_3.png',
         aspectRatio: 1,
         type: 'normal'
+    },
+    {
+        id: 2,
+        name: 'stamp1_2',
+        image: '/stamps/stamp1_2.png',
+        aspectRatio: 2,
+        type: 'outline'
+    },
+    {
+        id: 5,
+        name: 'stamp2_2',
+        image: '/stamps/stamp2_2.png',
+        aspectRatio: 2,
+        type: 'outline'
+    },
+    {
+        id: 8,
+        name: 'stamp3_2',
+        image: '/stamps/stamp3_2.png',
+        aspectRatio: 1,
+        type: 'outline'
     },
     {
         id: 11,
@@ -81,13 +95,6 @@ const stampStyles = [
         type: 'outline'
     }
     ,
-    {
-        id: 12,
-        name: 'stamp4_3',
-        image: '/stamps/stamp4_3.png',
-        aspectRatio: 1,
-        type: 'normal'
-    }
 ];
 
 export const StampStylesProvider = ({ children }) => {
