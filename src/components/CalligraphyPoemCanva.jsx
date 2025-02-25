@@ -14,7 +14,7 @@ import { usePageNavigation } from '../contexts/PageContext';
 
 const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
     const { recognizeStrokes, setRecognizeStrokes, buttons, setButtons } = useImageContext();
-    const strokeMax = 16;
+    const strokeMax = 12;
     const { currentPage } = usePageNavigation();
     const isOnPage = useRef(false);
 
