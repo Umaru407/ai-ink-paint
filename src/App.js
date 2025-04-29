@@ -35,6 +35,7 @@ const Page = ({ position, children }) => (
 
 const FullscreenPages = ({ pages }) => {
   const { currentPage, goToPage } = usePageNavigation();
+  const devMode = true;
   return (
     <div className="relative overflow-hidden h-screen">
       {pages.map((pageContent, index) => (
@@ -43,7 +44,7 @@ const FullscreenPages = ({ pages }) => {
         </Page>
       ))}
 
-      { false && currentPage > 0 && (
+      { devMode && currentPage > 0 && (
         <button
           onClick={() => goToPage(-1)}
           className="fixed left-4 top-1/2 transform -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/30 z-10"
@@ -52,7 +53,7 @@ const FullscreenPages = ({ pages }) => {
         </button>
       )}
 
-      { false && currentPage < pages.length - 1 && (
+      { devMode && currentPage < pages.length - 1 && (
         <button
           onClick={() => goToPage(1)}
           className="fixed right-4 top-1/2 transform -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/30 z-10"

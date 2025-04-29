@@ -1,4 +1,4 @@
-import { createContext, useState, useContext} from 'react';
+import { createContext, useState, useContext } from 'react';
 
 
 const ImageContext = createContext(undefined);
@@ -6,15 +6,17 @@ const ImageContext = createContext(undefined);
 export function ImageProvider({ children }) {
   const [images, setImages] = useState([]); //string[]
   const [prompt, setPrompt] = useState('');
+  
   const [recognizeStrokes, setRecognizeStrokes] = useState([]); //Stroke[]
 
   const [buttons, setButtons] = useState([]); //string[]
 
-  const value =  {
+  const value = {
     images,
     setImages,
     prompt,
     setPrompt,
+    
     recognizeStrokes,
     setRecognizeStrokes,
     buttons, setButtons
