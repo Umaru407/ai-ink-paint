@@ -42,6 +42,7 @@ const ImageSelectArea = () => {
             ))}
 
         </div>
+        
     );
 };
 

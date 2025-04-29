@@ -43,7 +43,7 @@ const FullscreenPages = ({ pages }) => {
         </Page>
       ))}
 
-      {currentPage > 0 && (
+      { false && currentPage > 0 && (
         <button
           onClick={() => goToPage(-1)}
           className="fixed left-4 top-1/2 transform -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/30 z-10"
@@ -52,7 +52,7 @@ const FullscreenPages = ({ pages }) => {
         </button>
       )}
 
-      {currentPage < pages.length - 1 && (
+      { false && currentPage < pages.length - 1 && (
         <button
           onClick={() => goToPage(1)}
           className="fixed right-4 top-1/2 transform -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/30 z-10"

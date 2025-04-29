@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { Button } from "@heroui/react";
 import { TANG_POEMS, useSelectPoetryContext } from '../contexts/SelectPoetryContext';
+import Text from './Text';
+
 // 唐詩數據庫
 
 
@@ -17,8 +19,8 @@ const PoetryAppreciation = () => {
           
         </CardHeader> */}
         <CardBody className='text-3xl  justify-center'>
-        
-        <p>{selectPoetry.appreciation}</p>
+        <Text type="heading">語譯</Text>
+        <p className='whitespace-pre-wrap'>{selectPoetry.translation}</p>
        
         </CardBody>
         {/* <Button color="primary">Primary</Button>className='bg-blue-500 w-full' */}

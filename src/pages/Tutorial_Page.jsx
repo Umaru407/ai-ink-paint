@@ -59,7 +59,7 @@ const TutorialPage = () => {
                         type: 'progressbar',
                         renderProgressbar: function (progressbarFillClass) {
                             return `<span class="flex justify-end items-center ${progressbarFillClass}" style="background: #4287f5; height: 32px">
-                                <span class="text-white text-sm">%</span>
+                               
                             </span>`;
                         }
                     }}

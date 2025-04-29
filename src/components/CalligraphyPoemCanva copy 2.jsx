@@ -14,7 +14,7 @@ import { Switch } from '@heroui/react';
 const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
     const { recognizeStrokes, setRecognizeStrokes, buttons, setButtons } = useImageContext();
     const [isSelected, setIsSelected] = React.useState(true);
-    const strokeMax = 16;
+    const strokeMax = 12;
 
     const GRID_COLS = 4;
     const GRID_ROWS = 5;
