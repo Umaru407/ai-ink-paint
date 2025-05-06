@@ -8,13 +8,13 @@ const WS_URL = process.env.REACT_APP_WS_URL
 
 // interface UseWebSocketImageGeneratorProps {
 //   clientId?: string;
-//   wsUrl?: string;
+//   wsUrl?: string;s
 // }
 
 
 
 export const useWebSocketImageGenerator = ({
-  clientId = crypto.randomUUID(),
+  clientId = Math.random(100),
   wsUrl = WS_URL
 } = {}) => {
   const [socket, setSocket] = useState(null);
