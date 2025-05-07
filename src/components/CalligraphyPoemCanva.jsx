@@ -14,7 +14,7 @@ import { usePageNavigation } from '../contexts/PageContext';
 
 const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
     const { recognizeStrokes, setRecognizeStrokes, buttons, setButtons } = useImageContext();
-    const strokeMax = 9;
+    const strokeMax = 6;
     const { currentPage } = usePageNavigation();
     const isOnPage = useRef(false);
 
@@ -36,7 +36,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
         distance: 10,
         spring: 0.3,
         friction: 0.5,
-        size: strokeMax + 2,
+        size: strokeMax + 6,
         diff: strokeMax + 2 / 8
     }
 
@@ -113,12 +113,12 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                         ax *= friction;
                         ay *= friction;
                         a += p.sqrt(ax * ax + ay * ay) - a;
-                        a *= 1.2;
+                        a *= 0.6;
                         if (isMax) {
                             r = size - a;
 
                         } else {
-                            r = r + 1
+                            r = r + 0.2
                             diff = r / 8;
                             if (r >= strokeMax) {
                                 isMax = true
