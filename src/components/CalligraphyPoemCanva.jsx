@@ -114,7 +114,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                         ay *= friction;
                         a += p.sqrt(ax * ax + ay * ay) - a;
                         a *= 0.6;
-                        console.log(a, 'a')
+                 
                         if (isMax) {
                             r = size - a*1.4;
 
@@ -132,6 +132,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                             x += ax / distance;
                             y += ay / distance;
                             oldR += (r - oldR) / distance*2;
+                            
 
                             if (oldR < 1) oldR = 1;
 
@@ -171,22 +172,23 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                         a *= 0.6;
 
                         if (isMax) {
-                            r = size - a;
+                            r = size - a*1.4;
+
                         } else {
-                            r = r + 1
+                            r = r + 0.4
                             diff = r / 8;
                             if (r >= strokeMax) {
                                 isMax = true
                             }
                         }
-                        // r = size - a;
 
                         for (let i = 0; i < distance; ++i) {
                             const oldX = x;
                             const oldY = y;
                             x += ax / distance;
                             y += ay / distance;
-                            oldR += (r - oldR) / distance;
+                            oldR += (r - oldR) / distance*2;
+                            
 
                             if (oldR < 1) oldR = 1;
 
