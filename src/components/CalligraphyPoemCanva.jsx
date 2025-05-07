@@ -36,7 +36,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
         distance: 10,
         spring: 0.3,
         friction: 0.5,
-        size: strokeMax ,
+        size: strokeMax,
         diff: strokeMax + 2 / 8
     }
 
@@ -114,27 +114,43 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                         ay *= friction;
                         a += p.sqrt(ax * ax + ay * ay) - a;
                         a *= 0.6;
-                 
-                        if (isMax) {
-                            r = size - a*1.4;
 
+                        let targetR;
+
+                        if (isMax) {
+                            targetR = size - a * 1.4;
+                            // 使用 lerp 讓 r 平滑接近 targetR，0.15 是調整速度的參數
+                            r = p.lerp(r, targetR, 0.15);
                         } else {
-                            r = r + 0.4
+                            r = r + 0.4;
                             diff = r / 8;
                             if (r >= strokeMax) {
-                                isMax = true
+                                isMax = true;
                             }
                         }
+
+                        // if (isMax) {
+                        //     r = size - a*1.4;
+
+                        // } else {
+                        //     r = r + 0.4
+                        //     diff = r / 8;
+                        //     if (r >= strokeMax) {
+                        //         isMax = true
+                        //     }
+                        // }
 
                         for (let i = 0; i < distance; ++i) {
                             const oldX = x;
                             const oldY = y;
                             x += ax / distance;
                             y += ay / distance;
-                            oldR += (r - oldR) / distance*2;
-                            
+
+                            oldR += (r - oldR) / distance * 2;
 
                             if (oldR < 1) oldR = 1;
+
+
 
                             p.strokeWeight(oldR + diff);
                             p.line(x, y, oldX, oldY);
@@ -172,7 +188,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                         a *= 0.6;
 
                         if (isMax) {
-                            r = size - a*1.4;
+                            r = size - a * 1.4;
 
                         } else {
                             r = r + 0.4
@@ -187,8 +203,8 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                             const oldY = y;
                             x += ax / distance;
                             y += ay / distance;
-                            oldR += (r - oldR) / distance*2;
-                            
+                            oldR += (r - oldR) / distance * 2;
+
 
                             if (oldR < 1) oldR = 1;
 
