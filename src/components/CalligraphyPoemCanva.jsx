@@ -113,7 +113,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                         ax *= friction;
                         ay *= friction;
                         a += p.sqrt(ax * ax + ay * ay) - a;
-                        a *= 0.6;
+                        a *= 1.2;
                         if (isMax) {
                             r = size - a;
 
