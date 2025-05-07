@@ -36,7 +36,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
         distance: 10,
         spring: 0.3,
         friction: 0.5,
-        size: strokeMax + 3,
+        size: strokeMax + 6,
         diff: strokeMax + 2 / 8
     }
 
@@ -118,7 +118,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                             r = size - a;
 
                         } else {
-                            r = r + 0.4
+                            r = r + 0.25
                             diff = r / 8;
                             if (r >= strokeMax) {
                                 isMax = true
