@@ -26,20 +26,23 @@ const ImageColor = ({ maxCanvasHeight, sharedColorGraphics, editMode }) => {
 
     useEffect(() => {
         isOnPage.current = currentPage === 4;
+        console.log(isOnPage.current, 'isOnPage.current')
 
         if (!isOnPage.current) {
             p5InstanceRef.current?.noLoop()
+            // console.log('noloop')
         } else {
             p5InstanceRef.current?.loop()
+            // console.log('loop')
         }
 
     }, [currentPage]);
 
     useEffect(() => {
-        console.log('@@@@@@@@@@@@@@')
+        // console.log('@@@@@@@@@@@@@@')
 
         if (!selectImage && !p5InstanceRef.current) return;
-        console.log('@@@@@@@@@@@@@@222')
+        // console.log('@@@@@@@@@@@@@@222')
         // if (p5InstanceRef.current) {
         //     p5InstanceRef.current.remove();
         // }
@@ -99,6 +102,8 @@ const ImageColor = ({ maxCanvasHeight, sharedColorGraphics, editMode }) => {
             p.draw = () => {
                 console.log('imagecolor draw')
                 // console.log(edit_mode.current)
+                if (!isOnPage.current) return;
+
                 p.clear()
                 p.image(bgImage, 0, 0, canvasWidth, canvasHeight);
                 // console.log(sharedColorGraphics)
@@ -115,8 +120,6 @@ const ImageColor = ({ maxCanvasHeight, sharedColorGraphics, editMode }) => {
                     }
                 }
                 p.blendMode(p.BLEND);
-
-
             };
 
             // 自定義方法，將畫布保存為 Base64 圖片數據

@@ -15,8 +15,7 @@ const ColorCanva = ({ maxCanvasHeight,setSharedColorGraphics, selectedColor, bru
     const select_color = useRef(selectedColor);
     const brush_size = useRef(brushSize / 10);
     const edit_mode = useRef(editMode)
-    const { currentPage, goToPage } = usePageNavigation();
-    const isOnPage = useRef(false);
+    
 
     useEffect(() => {
         select_color.current = selectedColor;
@@ -29,9 +28,10 @@ const ColorCanva = ({ maxCanvasHeight,setSharedColorGraphics, selectedColor, bru
     let canvasWidth
     let canvasHeight
 
+    const { currentPage, goToPage } = usePageNavigation();
+    const isOnPage = useRef(false);
     useEffect(() => {
         isOnPage.current = currentPage === 4;
-
         if (!isOnPage.current) {
             p5InstanceRef.current?.noLoop()
         } else {
@@ -111,8 +111,6 @@ const ColorCanva = ({ maxCanvasHeight,setSharedColorGraphics, selectedColor, bru
                 setSharedColorGraphics(p); // 傳遞給父組件
 
 
-            
-
                 for (let x = 0; x < p.width; x++) {
                     for (let y = 0; y < p.height; y++) {
                         paint.push(backgrd, backgrd, backgrd, 0);
@@ -125,6 +123,10 @@ const ColorCanva = ({ maxCanvasHeight,setSharedColorGraphics, selectedColor, bru
 
             p.draw = () => {
                 // if (currentPage !== 3) return;
+                console.log('colorCanva draw')
+                // console.log(edit_mode.current)
+                if (!isOnPage.current) return;
+
                 p.background(0)
                 // console.log('水墨draw')
                 // 获取缩放后的鼠标坐标
