@@ -122,7 +122,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight }) => {
                             // 使用 lerp 讓 r 平滑接近 targetR，0.15 是調整速度的參數
                             r = p.lerp(r, targetR, 0.15);
                         } else {
-                            r = r + 0.4;
+                            r = r + 0.8;
                             diff = r / 8;
                             if (r >= strokeMax) {
                                 isMax = true;
