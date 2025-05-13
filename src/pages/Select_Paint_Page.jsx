@@ -20,7 +20,7 @@ export default function Select_Paint_Page() {
     // const { paintImageData } = useP5Paint()
     return (
         <div className="paper-container flex flex-col p-8 h-full">
-            <div className='w-4 h-4 border border-white rounded-full opacity-60 absolute'
+            <div className='left-20 w-4 h-4 border border-white rounded-full opacity-60 absolute'
                 onClick={() => {
                     console.log(selectPoetry.title)
                     //const imageList = [`selectPoetry.title/${Math.random()}`, `selectPoetry.title/${Math.random()}`, `selectPoetry.title/${Math.random()}`,]

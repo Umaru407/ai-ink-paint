@@ -14,7 +14,7 @@ const Button = ({
     // };
 
     return (
-        <HeroButton size='lg' color='primary' className={`py-8 ${className}`}  {...props} >
+        <HeroButton size='lg' color='primary' className={` py-8 ${className}`}  {...props} >
             {children}
         </HeroButton >
     );

@@ -30,7 +30,7 @@ import { useP5Color } from '../contexts/p5ColorContext';
 const colors = [
     '#9d2933', '#f36838', '#ffb61e', '#16a951', '#1685a9', '#003472',
     '#ff4777', '#FFA07A', '#c89b40', '#549688', '#20B2AA', '#30dff3',
-    '#8d4bbb', '#815476', '#845a33', '#50616d',  '#778899', '#ffffff'
+    '#8d4bbb', '#815476', '#845a33', '#50616d', '#778899', '#ffffff'
 
 ];
 
@@ -47,22 +47,34 @@ const brushSizes = [
         size: 60,
         tag: '大'
     }
-    ]
+]
+
 
 function ColorPalette({ setSelectedColor }) {
+    // 紀錄目前選中的顏色
+    const [selectedColor, setSelectedColor2] = useState('#9d2933');
+
     return (
-        <div className='grid grid-cols-6 gap-4 w-full '>
-            {colors.map((color, index) => (
-                <div
-                    key={index}
-                    onClick={() => setSelectedColor(color)}
-                    className="aspect-square  border border-black rounded cursor-pointer hover:opacity-80"
-                    style={{ backgroundColor: color }}
-                ></div>
-            ))}
+        <div className="grid grid-cols-6 gap-4 w-full">
+            {colors.map((color, index) => {
+                const isSelected = color === selectedColor;
+                return (
+                    <div
+                        key={index}
+                        onClick={() => { setSelectedColor(color); setSelectedColor2(color) }}
+                        className={`
+              aspect-square rounded cursor-pointer hover:opacity-80
+              ${isSelected ? 'border-4 border-white' : 'border-2 border-transparent'}
+            `}
+                        style={{ backgroundColor: color }}
+                    />
+                );
+            })}
         </div>
     );
 }
+
+
 
 function BrushSizeSlector({ selectedColor, setBrushSize }) {
     return (
@@ -70,14 +82,13 @@ function BrushSizeSlector({ selectedColor, setBrushSize }) {
             {
                 brushSizes.map((size, index) => (
                     <div key={index}
-                        className='border-white  flex items-center justify-center w-16 h-16 bg-white'
+                        className='flex items-center justify-center w-16 h-16'
                         onClick={() => {
-                            // console.log('size', size)
                             setBrushSize(size.size)
                         }}
                     >
-                        <div className='rounded-full flex items-center justify-center' style={{ backgroundColor: selectedColor, width: `${size.size}px`, height: `${size.size}px` }}
-                            >{size.tag}</div>
+                        <div className='rounded-full flex items-center justify-center border-2 border-white' style={{ backgroundColor: selectedColor, width: `${size.size}px`, height: `${size.size}px` }}
+                        >{size.tag}</div>
                     </div>
                 ))
             }
@@ -145,19 +156,19 @@ export default function PaintPage() {
                     </div> */}
                 </div>
 
-                
+
 
 
                 <div className='mx-6 my-6 flex gap-12'>
 
-                        <div className='flex flex-col'>
+                    <div className='flex flex-col'>
                         <Text type="subtitle">筆刷</Text>
                         <BrushSizeSlector selectedColor={selectedColor} setBrushSize={setBrushSize} />
-                        </div>
-                        <div className='flex flex-col flex-1'>
-                            <Text type="subtitle">顏彩</Text>
-                            <ColorPalette setSelectedColor={setSelectedColor} />
-                        </div>
+                    </div>
+                    <div className='flex flex-col flex-1'>
+                        <Text type="subtitle">顏彩</Text>
+                        <ColorPalette setSelectedColor={setSelectedColor} selectedColor={selectedColor} />
+                    </div>
                 </div>
 
             </div>

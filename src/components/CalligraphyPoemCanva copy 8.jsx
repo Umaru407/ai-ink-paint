@@ -10,7 +10,7 @@ import { usePageNavigation } from '../contexts/PageContext';
 
 const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
     const { recognizeStrokes, setRecognizeStrokes, buttons, setButtons } = useImageContext();
-    const strokeMax = 10;
+    const strokeMax = 11;
     // const [isEraser, setIsEraser] = useState(false);
     const eraserRef = useRef(false);
 
@@ -31,21 +31,14 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
             p5InstanceRef.current?.loop();
         }
     }, [currentPage]);
-    const setting = {
-        distance: 10,
-        spring: 0.4,
-        friction: 0.5,
-        size: strokeMax + 3,
-        diff: strokeMax + 3 / 8
-    }
 
-    // const setting = {
-    //     distance: 8,
-    //     spring: 0.3,
-    //     friction: 0.5,
-    //     size: strokeMax + 2,
-    //     diff: (strokeMax + 2) / 8,
-    // };
+    const setting = {
+        distance: 8,
+        spring: 0.3,
+        friction: 0.5,
+        size: strokeMax + 2,
+        diff: (strokeMax + 2) / 8,
+    };
 
     const canvasRef = useRef(null);
     const p5InstanceRef = useRef(null);
@@ -95,6 +88,9 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
 
                 p.draw = () => {
 
+
+
+
                     oldR = r;
                     if (
                         p.mouseIsPressed &&
@@ -129,14 +125,14 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
                         ax *= friction;
                         ay *= friction;
                         a += p.sqrt(ax * ax + ay * ay) - a;
-                        a *= 0.7;
+                        a *= 0.8;
+
                         strokeFrame++;
                         if (isMax) {
-                            const targetR = size - a ;
-                            r = p.lerp(r, targetR, 0.3);
-                            // r = size - a;
+                            const targetR = size - a * 1.5;
+                            r = p.lerp(r, targetR, 0.2);
                         } else {
-                            const maxFrames = 9;
+                            const maxFrames = 10;
                             const t = Math.min(strokeFrame / maxFrames, 1);
                             const threshold = 0.7;
                             const startRatio = 0.6;
@@ -152,12 +148,12 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
                         }
 
                         // Draw or erase
-                        for (let i = 0; i < distance; ++i) {
+                        for (let i = 0; i < distance; i++) {
                             const oldX = x;
                             const oldY = y;
                             x += ax / distance;
                             y += ay / distance;
-                            oldR += ((r - oldR) / distance);
+                            oldR += ((r - oldR) / distance) * 2;
                             if (oldR < 1) oldR = 1;
 
                             if (eraserRef.current) {
@@ -178,7 +174,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
 
                         if (eraserRef.current) p.noErase();
                     } else if (f) {
-                        ax = ay  = f = 0;
+                        ax = ay = a = f = 0;
                         isMax = false;
                         r = 0;
                         strokeFrame = 0;

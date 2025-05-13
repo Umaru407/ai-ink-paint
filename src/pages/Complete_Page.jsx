@@ -1,11 +1,11 @@
-import React, { useEffect,  useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useP5Paint } from '../contexts/p5PaintContext';
 import Piece from '../components/Piece';
 import Text from '../components/Text';
 import { Skeleton } from '@heroui/react';
 
 
-function ImageQRCode({  imageData }) {
+function ImageQRCode({ imageData }) {
     const [qrUrl, setQrUrl] = useState('');
     // const [isLoading, setIsLoading] = useState(true);
 
@@ -52,7 +52,7 @@ function ImageQRCode({  imageData }) {
         <div className="flex justify-center mt-8 h-64">
             <div className="flex flex-col items-center">
                 <Text type="subtitle">掃描 QR Code 下載作品</Text>
-                {qrUrl ?  (<img src={qrUrl} alt="QR Code" className="mt-4" />) : (<Skeleton isLoaded={qrUrl} className="mt-4 w-[180px] h-[180px]" />)}
+                {qrUrl ? (<img src={qrUrl} alt="QR Code" className="mt-4" />) : (<Skeleton isLoaded={qrUrl} className="mt-4 w-[180px] h-[180px]" />)}
             </div>
 
         </div>
@@ -63,6 +63,38 @@ function ImageQRCode({  imageData }) {
 export default function Complete_Page() {
 
     const { paintImageData, p5PaintInstance } = useP5Paint()
+
+    const printBase64Image = (base64Image) => {
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>列印圖片</title>
+              <style>
+                @page {
+                  size: auto;
+                  margin: 0;
+                }
+                body {
+                  margin: 0;
+                }
+                img {
+                  width: 6cm;
+                  height: 10.5cm;
+                  object-fit: contain;
+                }
+              </style>
+            </head>
+            <body>
+              <img src="${base64Image}" onload="window.print(); window.close()" />
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+      };
+
+
+    // console.log(paintImageData, 'paintImageData')// 這裡的 paintImageData 是一個 base64 字串，代表著圖片的數據
     return (
         <div className="paper-container flex flex-col p-8 h-full">
             <Text type='title'>完成作品</Text>
@@ -72,6 +104,8 @@ export default function Complete_Page() {
 
 
             <ImageQRCode canvas={p5PaintInstance} imageData={paintImageData} />
+            <button onClick={()=>{printBase64Image(paintImageData)}}>列印圖片</button>
+
 
         </div>
     );

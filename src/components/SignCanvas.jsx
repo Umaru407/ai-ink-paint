@@ -397,10 +397,10 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
             <div ref={canvasRef} className="canvas-container w-full h-[560px] flex items-center justify-center bg-white" ></div>
             <div className="canvas-controls flex flex-col mt-8">
                
-                    <Button fullWidth onPress={clearCanvas} size='lg' color="primary">
+                    <Button fullWidth onPress={clearCanvas} size='lg' color="primary" className='mb-4'>
                         <DeleteIcon fontSize='large' /><Text type="heading" >清除</Text>
                     </Button>
-                    <Button fullWidth onPress={undoLastStroke} size='lg' color="primary">
+                    <Button fullWidth onPress={undoLastStroke} size='lg' color="primary" className='mb-4'>
                         <UndoIcon fontSize='large' /><Text type="heading" >回上一筆</Text>
                     </Button>
                

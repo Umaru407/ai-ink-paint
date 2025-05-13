@@ -21,6 +21,8 @@ import PaintPage from './pages/Paint_Page';
 import { P5ColorProvider } from './contexts/p5ColorContext';
 import { StampStylesProvider } from './contexts/stampStyleContext';
 import TutorialPage from './pages/Tutorial_Page';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 const Page = ({ position, children }) => (
   <div
     className="absolute w-screen h-screen transition-transform duration-500 ease-in-out"
@@ -44,21 +46,21 @@ const FullscreenPages = ({ pages }) => {
         </Page>
       ))}
 
-      { devMode && currentPage > 0 && (
+      {devMode && currentPage > 0 && (
         <button
           onClick={() => goToPage(-1)}
-          className="fixed left-4 top-1/2 transform -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/30 z-10"
+          className="w-min h-min fixed left-4 top-12 transform -translate-y-1/2 bg-white/10 p-1 rounded-full hover:bg-white/10 z-10"
         >
-          back
+          <NavigateBeforeIcon fontSize='small' />
         </button>
       )}
 
-      { devMode && currentPage < pages.length - 1 && (
+      {devMode && currentPage < pages.length - 1 && (
         <button
           onClick={() => goToPage(1)}
-          className="fixed right-4 top-1/2 transform -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/30 z-10"
+          className="w-min h-min fixed right-4 top-12 transform -translate-y-1/2 bg-white/10 p-1 rounded-full hover:bg-white/10 z-10"
         >
-          next
+          <NavigateNextIcon fontSize='small' />
         </button>
       )}
     </div>

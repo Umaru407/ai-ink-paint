@@ -18,16 +18,23 @@ import { useStampStyles } from '../contexts/stampStyleContext';
 
 
 function DoneButton() {
-    const { p5PaintInstance } = useP5Paint()
+    const { p5PaintInstance } = useP5Paint();
     const { goToPage } = usePageNavigation();
+
+
+
+
+
+
+
     return (
         <Button fullWidth onPress={() => {
-            p5PaintInstance.current?.saveCanvasToBuffer()
+            p5PaintInstance.current?.saveCanvasToBuffer();
             goToPage(1)
         }}>
-            <Text type="heading" >完成作品</Text>
+            <Text type="heading">完成作品</Text>
         </Button>
-    )
+    );
 }
 
 
@@ -79,7 +86,7 @@ export default function StampPage() {
                         <SignCanvas selectedStamp={stamp} setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} editMode={editMode} setEditMode={setEditMode} />
                     </div>
 
-                       
+
                 </div>
 
                 <div className='mx-12 my-6 flex flex-col justify-center flex-[2]'>
