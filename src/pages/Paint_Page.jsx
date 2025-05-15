@@ -26,11 +26,10 @@ import IconSwitch from '../components/IconSwitch';
 import { useP5Color } from '../contexts/p5ColorContext';
 
 
-// pages/color-palette.tsx
 const colors = [
-    '#9d2933', '#f36838', '#ffb61e', '#16a951', '#1685a9', '#003472',
-    '#ff4777', '#FFA07A', '#c89b40', '#549688', '#20B2AA', '#30dff3',
-    '#8d4bbb', '#815476', '#845a33', '#50616d', '#778899', '#ffffff'
+    '#9d2933', '#f36838', '#ffb61e', '#40de5a', '#16a951', '#815476',
+    '#ff4777', '#f9906f', '#ae7000', '#789262', '#057748', '#845a33',
+    '#30dff3', '#1685a9', '#003472', '#161823', '#50616d', '#fff2df'
 
 ];
 
