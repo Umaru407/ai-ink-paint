@@ -80,7 +80,7 @@ function DoneButton() {
             p5PaintInstance.current?.saveCanvasToBuffer()
             goToPage(1)
         }}>
-            <Text type="heading" >完成作品</Text>
+            <Text type="heading" > 完成作品 </Text>
         </Button>
     )
 }
