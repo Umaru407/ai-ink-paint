@@ -84,28 +84,30 @@ const TutorialPage = () => {
                                 {/* <Text type='heading' className='mb-4' >
                                     {tutorial.intro}
                                 </Text> */}
-
-                                <div className='p-6 m-4 flex flex-col items-center justify-center bg-stone-600 rounded-lg'>
+ 
+                                <div className='w-fit p-4 m-4 flex flex-col items-center justify-center bg-stone-600 rounded-lg'>
 
                                     <img
                                         src={tutorial.image}
                                         alt={`教學 ${index + 1}`}
-                                        className='w-full  object-contain rounded-lg'
+                                        className='w-11/12 h-fit object-contain rounded-lg'
                                     />
 
+                                     
                                 </div>
 
 
-
-
-
-                                {
+{
                                     index === tutorials.length - 1 && (
-                                        <Button className='mt-4' fullWidth onPress={() => goToPage(1)}>
+                                        <Button className='mt-4 flex-grow' fullWidth onPress={() => goToPage(1)}>
                                             <Text type="heading">開始作品</Text>
                                         </Button>
                                     )
                                 }
+
+
+
+                               
 
 
 
