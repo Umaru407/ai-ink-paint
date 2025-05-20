@@ -23,6 +23,7 @@ import { StampStylesProvider } from './contexts/stampStyleContext';
 import TutorialPage from './pages/Tutorial_Page';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { useEffect } from 'react';
 const Page = ({ position, children }) => (
   <div
     className="absolute w-screen h-screen transition-transform duration-500 ease-in-out"
@@ -37,6 +38,8 @@ const Page = ({ position, children }) => (
 
 const FullscreenPages = ({ pages }) => {
   const { currentPage, goToPage } = usePageNavigation();
+
+
   const devMode = true;
   return (
     <div className="relative overflow-hidden h-screen">
@@ -81,6 +84,19 @@ export default function Home() {
 
 
   ];
+
+  useEffect(() => {
+  const handleBeforeUnload = (e) => {
+    e.preventDefault();
+    e.returnValue = ''; // 必須設置這一行才能觸發提示框
+  };
+
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  };
+}, []);
+
 
   return (
     <HeroUIProvider>
