@@ -93,6 +93,17 @@ export default function Complete_Page() {
         printWindow.document.close();
       };
 
+      const downloadBase64Image = (base64Image, filename = 'image.png') => {
+  const link = document.createElement('a');
+  link.href = base64Image;
+  link.download = filename;
+
+  // 模擬點擊下載
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
 
     // console.log(paintImageData, 'paintImageData')// 這裡的 paintImageData 是一個 base64 字串，代表著圖片的數據
     return (
@@ -104,8 +115,8 @@ export default function Complete_Page() {
 
 
             <ImageQRCode canvas={p5PaintInstance} imageData={paintImageData} />
-            <button onClick={()=>{printBase64Image(paintImageData)}}>列印圖片</button>
-
+            {/* <button onClick={()=>{printBase64Image(paintImageData)}}>列印圖片</button> */}
+<button onClick={()=>{ downloadBase64Image(paintImageData)}}>列印圖片</button>
 
         </div>
     );
