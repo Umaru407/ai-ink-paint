@@ -116,7 +116,7 @@ export default function Complete_Page() {
 
             <ImageQRCode canvas={p5PaintInstance} imageData={paintImageData} />
             {/* <button onClick={()=>{printBase64Image(paintImageData)}}>列印圖片</button> */}
-<button onClick={()=>{ downloadBase64Image(paintImageData)}}>列印圖片</button>
+<button onClick={()=>{ printBase64Image(paintImageData)}}>列印圖片</button>
 
         </div>
     );
