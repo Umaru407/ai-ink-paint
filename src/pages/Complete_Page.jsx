@@ -3,7 +3,7 @@ import { useP5Paint } from '../contexts/p5PaintContext';
 import Piece from '../components/Piece';
 import Text from '../components/Text';
 import { Skeleton } from '@heroui/react';
-
+import { jsPDF } from 'jspdf';
 
 function ImageQRCode({ imageData }) {
     const [qrUrl, setQrUrl] = useState('');
@@ -104,6 +104,26 @@ export default function Complete_Page() {
   document.body.removeChild(link);
 };
 
+const SaveImageAsPDF = (base64Image ) => {
+
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'cm',
+      format: 'a4',
+    });
+
+    const width = 6;
+    const height = 10.5;
+    const x = 2; // 可根據需要調整位置
+    const y = 2;
+    
+    console.log(base64Image)
+
+    pdf.addImage(base64Image, 'JPEG', x, y, width, height);
+    pdf.save('image.pdf');
+  }
+
+
 
     // console.log(paintImageData, 'paintImageData')// 這裡的 paintImageData 是一個 base64 字串，代表著圖片的數據
     return (
@@ -116,7 +136,7 @@ export default function Complete_Page() {
 
             <ImageQRCode canvas={p5PaintInstance} imageData={paintImageData} />
             {/* <button onClick={()=>{printBase64Image(paintImageData)}}>列印圖片</button> */}
-<button onClick={()=>{ printBase64Image(paintImageData)}}>列印圖片</button>
+<button onClick={()=>{ SaveImageAsPDF(paintImageData);console.log('savepdf')}}>列印圖片</button>
 
         </div>
     );

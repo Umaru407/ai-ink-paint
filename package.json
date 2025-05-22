@@ -17,6 +17,7 @@
     "fabricjs-react": "1.2.0",
     "framer-motion": "^12.0.5",
     "image-js": "^0.35.6",
+    "jspdf": "^3.0.1",
     "p5": "^1.11.2",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
