@@ -146,7 +146,7 @@ export default function Complete_Page() {
     // console.log(filename)
 
     try {
-      const res = await fetch('http://localhost:5000/uploadPDF', {
+      const res = await fetch('https://ai-ink-paint-backend-git-main-umarus-projects-931fb619.vercel.app/uploadPDF', {
         method: 'POST',
         body: formData,
       });
