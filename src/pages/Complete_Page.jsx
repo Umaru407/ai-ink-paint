@@ -144,9 +144,9 @@ export default function Complete_Page() {
     const filename = `image_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}.pdf`;
     formData.append('file', pdfBlob, filename);
     // console.log(filename)
-
+// https://ai-ink-paint-backend-git-main-umarus-projects-931fb619.vercel.app/uploadPDF
     try {
-      const res = await fetch('https://ai-ink-paint-backend-git-main-umarus-projects-931fb619.vercel.app/uploadPDF', {
+      const res = await fetch('http://localhost:5000/uploadPDF', {
         method: 'POST',
         body: formData,
       });
