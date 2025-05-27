@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useP5Paint } from '../contexts/p5PaintContext';
 import Piece from '../components/Piece';
 import Text from '../components/Text';
-import { Skeleton } from '@heroui/react';
+import { Button, Skeleton } from '@heroui/react';
 import { jsPDF } from 'jspdf';
+
 
 function ImageQRCode({ imageData }) {
   const [qrUrl, setQrUrl] = useState('');
@@ -63,6 +64,7 @@ function ImageQRCode({ imageData }) {
 export default function Complete_Page() {
 
   const { paintImageData, p5PaintInstance } = useP5Paint()
+  const [isUploading, setIsUploading] = useState(false); // Add this line
 
   const uploadPDFToServer = async (pdfDataUri) => {
     const base64 = pdfDataUri.split(',')[1];
@@ -122,6 +124,9 @@ export default function Complete_Page() {
   };
 
   const SaveImageAsPDFtoGoogle = async (base64Image) => {
+
+    setIsUploading(true); // Add this line
+
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'cm',
@@ -144,17 +149,20 @@ export default function Complete_Page() {
     const filename = `image_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}.pdf`;
     formData.append('file', pdfBlob, filename);
     // console.log(filename)
-// https://ai-ink-paint-backend-git-main-umarus-projects-931fb619.vercel.app/uploadPDF
+    // https://ai-ink-paint-backend-git-main-umarus-projects-931fb619.vercel.app/uploadPDF
     try {
-      const res = await fetch('http://localhost:5000/uploadPDF', {
+      const res = await fetch('https://ai-ink-paint-backend-git-main-umarus-projects-931fb619.vercel.app/uploadPDF', {
         method: 'POST',
         body: formData,
       });
 
       const result = await res.json();
+
       alert('成功上傳');
     } catch (err) {
       console.error('上傳失敗:', err);
+    } finally {
+      setIsUploading(false); // Add this line
     }
   };
 
@@ -164,24 +172,24 @@ export default function Complete_Page() {
   return (
     <div className="paper-container flex flex-col p-8 h-full">
       <Text type='title'>完成作品</Text>
-
-
       <Piece image={paintImageData} />
 
-<div className='flex justify-around'>
- <ImageQRCode canvas={p5PaintInstance} imageData={paintImageData} />
-     <div className="flex justify-center mt-4 h-64">
-      <div className="flex flex-col items-center">
-        <Text type="subtitle">問卷調查</Text>
-        <img src={'/google表單.png'} alt="google QR Code" className="mt-4 h-[180px] w-[180px]" />
+      <div className='flex justify-around'>
+        <ImageQRCode canvas={p5PaintInstance} imageData={paintImageData} />
+        {/* <div className="flex justify-center mt-4 h-64">
+          <div className="flex flex-col items-center">
+            <Text type="subtitle">問卷調查</Text>
+            <img src={'/google表單.png'} alt="google QR Code" className="mt-4 h-[180px] w-[180px]" />
+          </div>
+
+        </div> */}
       </div>
 
-    </div>
-</div>
-     
       {/* <button onClick={()=>{printBase64Image(paintImageData)}}>列印圖片</button> */}
-      <button onClick={() => { SaveImageAsPDFtoGoogle(paintImageData); console.log('savepdf') }}>列印圖片</button>
-
+      {/* <button onClick={() => { SaveImageAsPDFtoGoogle(paintImageData); console.log('savepdf') }}>上傳圖片</button> */}
+      <Button isLoading={isUploading} color="primary" onPress={() => { SaveImageAsPDFtoGoogle(paintImageData); console.log('savepdf') }} className="mt-4" isDisabled={isUploading}>
+        <Text type="body">上傳列印</Text>
+      </Button>
     </div>
   );
 }
