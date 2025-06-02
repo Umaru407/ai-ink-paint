@@ -12,7 +12,7 @@ const PoetryList = ({ setPrompt }) => {
     const { selectPoetry, setSelectPoetry } = useSelectPoetryContext();
 
     useEffect(() => {
-        setPrompt(selectPoetry.content)
+        setPrompt(selectPoetry.translation || selectPoetry.content);
     }, [selectPoetry])
     // const [currentPoem, setCurrentPoem] = useState(TANG_POEMS[0]);
     // const { prompt, setPrompt } = useImageContext();

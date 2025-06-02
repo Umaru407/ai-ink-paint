@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import p5 from 'p5';
+import Slider from '../components/Slider';
 import recognizeHandwriting from '../utils/recognizeHandwriting';
 // import { Stroke } from '../types';
 
@@ -7,10 +8,15 @@ import { useImageContext } from '../contexts/ImageContext';
 import { useP5Ink } from '../contexts/p5InkContext';
 import { Switch } from '@heroui/react';
 import { usePageNavigation } from '../contexts/PageContext';
+// import Slider from './Slider';
 
-const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
+const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser,eraserSize,strokeMax }) => {
     const { recognizeStrokes, setRecognizeStrokes, buttons, setButtons } = useImageContext();
-    const strokeMax = 10;
+    // const strokeMax = 18;
+
+    
+
+    // const [strokeMax, setStrokeMax] = useState(10);
     // const [isEraser, setIsEraser] = useState(false);
     const eraserRef = useRef(false);
 
@@ -31,13 +37,13 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
             p5InstanceRef.current?.loop();
         }
     }, [currentPage]);
-    const setting = {
-        distance: 10,
-        spring: 0.4,
-        friction: 0.5,
-        size: strokeMax + 3,
-        diff: strokeMax + 3 / 8
-    }
+    // const setting = {
+    //     distance: 10,
+    //     spring: 0.4,
+    //     friction: 0.5,
+    //     size: strokeMax + 3,
+    //     diff: strokeMax + 3 / 8
+    // }
 
     // const setting = {
     //     distance: 8,
@@ -49,7 +55,35 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
 
     const canvasRef = useRef(null);
     const p5InstanceRef = useRef(null);
+
+    const brushSizeSetting = useRef({
+        strokeMax: strokeMax,
+        distance: 10,
+        spring: 0.4,
+        friction: 0.5,
+        size: strokeMax + 3,
+        diff: strokeMax + 3 / 8
+    }
+    );
+
+    useEffect(() => {
+        
+        const strokeMaxValue  = strokeMax;
+        console.log(strokeMaxValue, 'strokeMaxValue');
+        brushSizeSetting.current = {
+            strokeMax: strokeMaxValue,
+            distance: 10,
+            spring: 0.4,
+            friction: 0.5,
+            size: strokeMaxValue + 3,
+            diff: strokeMaxValue + 3 / 8
+        };
+
+        console.log(brushSizeSetting.current, 'brushSizeSetting.current');
+    }, [strokeMax]);
+
     const { p5InkInstance, setP5InkReady, setInkImageData } = useP5Ink();
+
 
     // Trigger handwriting recognition on strokes update
     // useEffect(() => {
@@ -68,8 +102,9 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
                 let canvas;
                 let currentStroke = [[], [], []];
                 let strokes = [];
-
-                let { distance, spring, friction, size, diff } = setting;
+                // console.log(brushSizeSetting, 'brushSizeSetting.current')
+                //let {strokeMax, distance, spring, friction, size, diff } = brushSizeSetting.current;
+                
                 let x = 0,
                     y = 0,
                     ax = 0,
@@ -79,7 +114,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
                     f = 0;
                 let oldR = 0;
                 let isMax = false;
-                const eraserSize = 30;
+                // const eraserSize = 30;
 
                 let drawing = false;
                 let drawStartTime;
@@ -124,15 +159,15 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
                         }
 
                         // spring physics
-                        ax += (mX - x) * spring;
-                        ay += (mY - y) * spring;
-                        ax *= friction;
-                        ay *= friction;
+                        ax += (mX - x) * brushSizeSetting.current.spring;
+                        ay += (mY - y) * brushSizeSetting.current.spring;
+                        ax *= brushSizeSetting.current.friction;
+                        ay *= brushSizeSetting.current.friction;
                         a += p.sqrt(ax * ax + ay * ay) - a;
                         a *= 0.7;
                         strokeFrame++;
                         if (isMax) {
-                            const targetR = size - a ;
+                            const targetR = brushSizeSetting.current.size - a ;
                             r = p.lerp(r, targetR, 0.3);
                             // r = size - a;
                         } else {
@@ -146,18 +181,18 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
                                 const tt = (t - threshold) / (1 - threshold);
                                 easedT = startRatio + (1 - startRatio) * tt * tt;
                             }
-                            r = (strokeMax - 2) * easedT;
-                            diff = r / 8;
+                            r = (brushSizeSetting.current.strokeMax - 2) * easedT;
+                            brushSizeSetting.current.diff = r / 8;
                             if (t > 0.9) isMax = true;
                         }
 
                         // Draw or erase
-                        for (let i = 0; i < distance; ++i) {
+                        for (let i = 0; i < brushSizeSetting.current.distance; ++i) {
                             const oldX = x;
                             const oldY = y;
-                            x += ax / distance;
-                            y += ay / distance;
-                            oldR += ((r - oldR) / distance);
+                            x += ax / brushSizeSetting.current.distance;
+                            y += ay / brushSizeSetting.current.distance;
+                            oldR += ((r - oldR) / brushSizeSetting.current.distance);
                             if (oldR < 1) oldR = 1;
 
                             if (eraserRef.current) {
@@ -168,11 +203,11 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
                                 // 離開擦除模式
                                 p.noErase();
                             } else {
-                                p.strokeWeight(oldR + diff);
+                                p.strokeWeight(oldR + brushSizeSetting.current.diff);
                                 p.line(x, y, oldX, oldY);
                                 p.strokeWeight(oldR);
-                                p.line(x + diff * 2, y + diff * 2, oldX + diff * 2, oldY + diff * 2);
-                                p.line(x - diff, y - diff, oldX - diff, oldY - diff);
+                                p.line(x + brushSizeSetting.current.diff * 2, y + brushSizeSetting.current.diff * 2, oldX + brushSizeSetting.current.diff * 2, oldY + brushSizeSetting.current.diff * 2);
+                                p.line(x - brushSizeSetting.current.diff, y - brushSizeSetting.current.diff, oldX - brushSizeSetting.current.diff, oldY - brushSizeSetting.current.diff);
                             }
                         }
 
@@ -244,6 +279,7 @@ const CalligraphyPoemCanva = ({ canvasWidth, canvasHeight, isEraser }) => {
                     //show image in blank website
                     // window.open(dataUrl, '_blank');
                     // console.log(dataUrl, 'dataUrl')
+                    console.log('saveInkCanvasToBuffer');
                     setInkImageData(dataUrl);
                 };
             };

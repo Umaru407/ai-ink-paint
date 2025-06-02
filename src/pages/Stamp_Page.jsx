@@ -17,21 +17,32 @@ import { useP5Sign } from '../contexts/p5SignContext';
 import { useStampStyles } from '../contexts/stampStyleContext';
 
 
-function DoneButton() {
+function DoneButton({ editMode, setEditMode }) {
     const { p5PaintInstance } = useP5Paint();
     const { goToPage } = usePageNavigation();
+    const [isDone, setIsDone] = useState(false);
 
+    useEffect(() => {
+        if (isDone) {
 
+            // console.log(editMode, 'editMode', isDone, 'isDone')
+            p5PaintInstance.current?.saveCanvasToBuffer();
+            goToPage(1);
+            setIsDone(false);
+        }
+    }, [editMode, isDone]);
 
-
-
-
+    const handleDone = () => {
+        setEditMode(false);
+        setIsDone(true);
+        // p5PaintInstance.current?.saveCanvasToBuffer();
+    };
 
     return (
-        <Button fullWidth onPress={() => {
-            p5PaintInstance.current?.saveCanvasToBuffer();
-            goToPage(1)
-        }}>
+        <Button
+            fullWidth
+            onPress={handleDone}
+        >
             <Text type="heading">完成作品</Text>
         </Button>
     );
@@ -58,16 +69,12 @@ export default function StampPage() {
         //get the width of the color container
         const width = ColorContainer.current.offsetWidth;
 
-        // console.log(width, height, 'width, height')
-
         setColorDimensions({ width, height });
     }, [ColorContainer.current?.offsetHeight]);
 
-    // const { selectImage } = useSelectImageContext();
     const [sharedGraphics, setSharedGraphics] = useState(null); // 共享畫布數據
     const [sharedColorGraphics, setSharedColorGraphics] = useState(null); // 共享畫布數據
-    // const [selectedColor, setSelectedColor] = useState(colors[0]);
-    // const [brushSize, setBrushSize] = useState(20);
+
     const [editMode, setEditMode] = useState(false)
     return (
         <div className="paper-container flex flex-col h-full  p-8">
@@ -97,7 +104,7 @@ export default function StampPage() {
             </div>
 
             <div className="px-8 shrink">
-                <DoneButton />
+                <DoneButton editMode={editMode} setEditMode={setEditMode} />
             </div>
         </div>
     );

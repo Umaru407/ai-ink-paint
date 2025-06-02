@@ -56,15 +56,23 @@ function ColorPalette({ setSelectedColor }) {
     return (
         <div className="grid grid-cols-6 gap-4 w-full">
             {colors.map((color, index) => {
-                const isSelected = color === selectedColor;
+                // const isSelected = color === selectedColor;
                 return (
                     <div
                         key={index}
                         onClick={() => { setSelectedColor(color); setSelectedColor2(color) }}
-                        className={`
-              aspect-square rounded cursor-pointer hover:opacity-80
-              ${isSelected ? 'border-4 border-white' : 'border-2 border-transparent'}
-            `}
+            //             className={`
+            //   aspect-square rounded cursor-pointer hover:opacity-80
+            //   ${isSelected ? 'border-4 border-white' : 'border-2 border-transparent'}
+            // `}
+
+            className={`aspect-square rounded-lg border-2 transition-all hover:scale-110 ${
+                      selectedColor === color 
+                        ? 'border-white shadow-lg ring-2 ring-blue-400' 
+                        : 'border-gray-600 hover:border-gray-400'
+                    }`}
+    
+
                         style={{ backgroundColor: color }}
                     />
                 );

@@ -100,7 +100,7 @@ const ImageColor = ({ maxCanvasHeight, sharedColorGraphics, editMode }) => {
             };
 
             p.draw = () => {
-                console.log('imagecolor draw')
+                // console.log('imagecolor draw')
                 // console.log(edit_mode.current)
                 if (!isOnPage.current) return;
 

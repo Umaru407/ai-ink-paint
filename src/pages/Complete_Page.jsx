@@ -2,19 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useP5Paint } from '../contexts/p5PaintContext';
 import Piece from '../components/Piece';
 import Text from '../components/Text';
-import { Button, Skeleton } from '@heroui/react';
+import { Button, Skeleton, Spinner } from '@heroui/react';
 import { jsPDF } from 'jspdf';
-
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 function ImageQRCode({ imageData }) {
   const [qrUrl, setQrUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   // const [isLoading, setIsLoading] = useState(true);
 
   // console.log(imageData, 'imageData')
 
   useEffect(() => {
     if (!imageData) return;
-
+    setIsLoading(true);
     // 將 base64 圖片數據轉換為 URL
     const imageUrl = imageData
 
@@ -35,13 +36,16 @@ function ImageQRCode({ imageData }) {
       .then(response => response.json())
       .then(data => {
         // 從後端獲取 QR Code URL
-
+        setIsLoading(false);
         const qrCodeUrl = data.qrCodeUrl;
         setQrUrl(qrCodeUrl);
+        
       })
       .catch(error => {
         console.error('上傳圖片時發生錯誤:', error);
       });
+
+
 
     // 創建 QR Code URL
     // const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(imageUrl)}`;
@@ -53,7 +57,7 @@ function ImageQRCode({ imageData }) {
     <div className="flex justify-center mt-4 h-64">
       <div className="flex flex-col items-center">
         <Text type="subtitle">下載作品</Text>
-        {qrUrl ? (<img src={qrUrl} alt="QR Code" className="mt-4" />) : (<Skeleton isLoaded={qrUrl} className="mt-4 w-[180px] h-[180px]" />)}
+        {!isLoading ? (<img src={qrUrl} alt="QR Code" className="mt-4" />) : (<Skeleton isLoaded={!isLoading} className="mt-4 w-[180px] h-[180px]" />)}
       </div>
 
     </div>
@@ -158,13 +162,22 @@ export default function Complete_Page() {
 
       const result = await res.json();
 
-      alert('成功上傳');
+      // alert('成功上傳');
     } catch (err) {
       console.error('上傳失敗:', err);
     } finally {
       setIsUploading(false); // Add this line
     }
   };
+
+  useEffect(() => { 
+    if (!paintImageData) return;
+    // console.log(paintImageData, 'paintImageData')
+    // downloadBase64Image(paintImageData, 'image.png');
+    // printBase64Image(paintImageData);
+    SaveImageAsPDFtoGoogle(paintImageData); // 這裡的 paintImageData 是一個 base64 字串，代表著圖片的數據
+  }, [paintImageData]);
+  
 
 
 
@@ -187,9 +200,22 @@ export default function Complete_Page() {
 
       {/* <button onClick={()=>{printBase64Image(paintImageData)}}>列印圖片</button> */}
       {/* <button onClick={() => { SaveImageAsPDFtoGoogle(paintImageData); console.log('savepdf') }}>上傳圖片</button> */}
-      <Button isLoading={isUploading} color="primary" onPress={() => { SaveImageAsPDFtoGoogle(paintImageData); console.log('savepdf') }} className="mt-4" isDisabled={isUploading}>
+      {/* <Button isLoading={isUploading} color="primary" onPress={() => { SaveImageAsPDFtoGoogle(paintImageData); console.log('savepdf') }} className="mt-4" isDisabled={isUploading}>
         <Text type="body">上傳列印</Text>
-      </Button>
+      </Button> */}
+
+ <div className="flex items-center justify-center h-16">
+      {isUploading ? (
+        <Spinner label="載入中..." />
+      ) : (
+        <div className="flex items-center gap-2 text-green-600">
+          <CheckCircleIcon fontSize="large" />
+          <span>上傳成功</span>
+        </div>
+      )}
+    </div>
+
+
     </div>
   );
 }

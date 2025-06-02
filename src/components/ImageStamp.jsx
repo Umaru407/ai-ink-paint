@@ -62,7 +62,7 @@ const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedCol
             let offsetX, offsetY; // Mouseclick offset
             let aspectRatio; // Aspect ratio of the image
 
-            let handleSize = 20; // Size of resize handle
+            let handleSize = 30; // Size of resize handle
 
             let scale = 6;
 
@@ -125,17 +125,7 @@ const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedCol
                 p.image(bgImage, 0, 0, canvasWidth, canvasHeight);
                 // console.log(sharedColorGraphics)
                 p.blendMode(p.SOFT_LIGHT);
-
-                // try {
-                //     p.image(sharedColorGraphics, 0, 0, canvasWidth, canvasHeight);
-                // } catch (error) {
-                //     console.log(error, 'error')
-                //     console.log(sharedColorGraphics, 'sharedColorGraphics', canvasWidth, canvasHeight)
-                // }
                 p.blendMode(p.BLEND);
-
-
-                // Check if mouse is over the image
                 if (p.mouseX > x && p.mouseX < x + w && p.mouseY > y && p.mouseY < y + h) {
                     rollover = true;
                 } else {
@@ -197,7 +187,8 @@ const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedCol
                 // Draw bounding box and handle only if in edit mode
                 if (edit_mode.current) {
                     p.noFill();
-                    p.stroke(0);
+                    p.stroke(0, 111, 238);
+                    p.strokeWeight(4);
                     p.rect(
                         x - sharedGraphics.width / scale / 2,
                         y,
@@ -207,7 +198,7 @@ const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedCol
                     );
 
                     // Draw resize handle
-                    p.fill(0);
+                    p.fill(0, 111, 238);
                     p.noStroke();
                     p.rect(x + w - handleSize / 2, y + h + sharedGraphics.height / scale / 2 / 2 - handleSize / 2, handleSize, handleSize);
                 }
@@ -284,10 +275,14 @@ const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedCol
 
             // 自定義方法，將畫布保存為 Base64 圖片數據
             p.saveCanvasToBuffer = () => {
+                // console.log('saveCanvasToBuffer');
+
+                // 強制執行一次 draw() 更新畫布內容
+                p.redraw();
                 const canvas = p.canvas; // 獲取 HTML Canvas 元素
                 const dataUrl = canvas.toDataURL("image/png"); // 將畫布轉為 Base64
-                // console.log(dataUrl,'777')
                 setPaintImageData(dataUrl); // 將 Base64 數據存入 Context
+
             };
 
         };
@@ -299,7 +294,7 @@ const ImageStamp = ({ maxCanvasHeight, maxCanvasWidth, sharedGraphics, sharedCol
         return () => {
             p5InstanceRef.current?.remove();
         };
-    }, [colorImageData]);
+    }, [colorImageData, inkImageData]);
 
     return <div ref={canvasRef} />;
 };

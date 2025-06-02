@@ -8,42 +8,42 @@ const stampStyles = [
       id: 1,
       name: 'stamp1_1',
       image: '/stamps/stamp1_1.png',
-      aspectRatio: 2,
+      aspectRatio: 2.3,
       type: 'normal'
   },
   {
       id: 2,
       name: 'stamp1_2',
       image: '/stamps/stamp1_2.png',
-      aspectRatio: 2,
+      aspectRatio: 2.3,
       type: 'outline'
   },
   {
       id: 3,
       name: 'stamp1_3',
       image: '/stamps/stamp1_3.png',
-      aspectRatio: 2,
+      aspectRatio: 2.3,
       type: 'normal'
   },
   {
       id: 4,
       name: 'stamp2_1',
       image: '/stamps/stamp2_1.png',
-      aspectRatio: 2,
+      aspectRatio: 2.3,
       type: 'normal'
   },
   {
       id: 5,
       name: 'stamp2_2',
       image: '/stamps/stamp2_2.png',
-      aspectRatio: 2,
+      aspectRatio: 2.3,
       type: 'outline'
   },
   {
       id: 6,
       name: 'stamp2_3',
       image: '/stamps/stamp2_3.png',
-      aspectRatio: 2,
+      aspectRatio: 2.3,
       type: 'normal'
   },
   {

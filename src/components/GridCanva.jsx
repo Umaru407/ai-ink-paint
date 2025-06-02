@@ -9,7 +9,7 @@ const GridCanva = ({ canvasWidth, canvasHeight, showGrid, useEraser }) => {
   const p5InstanceRef = useRef(null);
   const showGridRef = useRef(showGrid);
   const useEraserRef = useRef(useEraser);
-
+  const eraserImgRef = useRef(null); // Add this ref for the eraser image
   // 當 showGrid 變動時重繪
   useEffect(() => {
     showGridRef.current = showGrid;
@@ -42,6 +42,11 @@ const GridCanva = ({ canvasWidth, canvasHeight, showGrid, useEraser }) => {
         p.noLoop();
       };
 
+      p.preload = () => {
+        // Load the eraser image - adjust the path to your eraser image
+        eraserImgRef.current = p.loadImage('/eraser.png');
+      };
+
       p.draw = () => {
         // 背景＋格線
         p.background(255);
@@ -58,7 +63,10 @@ const GridCanva = ({ canvasWidth, canvasHeight, showGrid, useEraser }) => {
           p.push();
           p.noStroke();
           p.fill(0, 102, 204, 150);
-          p.ellipse(p.mouseX, p.mouseY,30,30);
+          p.ellipse(p.mouseX , p.mouseY, 40, 40);
+          //  p.rotate(-p.PI / 4); // 逆時針旋轉 45 度
+           p.imageMode(p.CENTER);
+          p.image(eraserImgRef.current, p.mouseX+35, p.mouseY+35, 100, 100);
           p.pop();
         }
       };

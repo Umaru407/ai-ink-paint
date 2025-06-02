@@ -65,7 +65,7 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
         height: 280
     })
 
-    let canvasHeight = 560
+    let canvasHeight = 660
     let canvasWidth = 280;
     useEffect(() => {
         // console.log(stamp, 'stamp')
@@ -84,6 +84,8 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
             width: canvasWidth,
             height: stamp.aspectRatio * canvasWidth
         }
+
+        console.log(stamp)
 
 
     }, [stamp])
@@ -394,7 +396,7 @@ const SignCanvas = ({ setSharedGraphics, editMode, setEditMode, selectedStamp })
 
     return (
         <div className="paper flex flex-col justify-center items-center h-full">
-            <div ref={canvasRef} className="canvas-container w-full h-[560px] flex items-center justify-center bg-white" ></div>
+            <div ref={canvasRef} className="canvas-container w-full h-[660px] flex items-center justify-center bg-white" ></div>
             <div className="canvas-controls flex flex-col mt-8">
                
                     <Button fullWidth onPress={clearCanvas} size='lg' color="primary" className='mb-4'>

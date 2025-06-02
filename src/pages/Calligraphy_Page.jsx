@@ -14,6 +14,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import UndoIcon from '@mui/icons-material/Undo';
 import BrushIcon from '@mui/icons-material/Brush';
 import AutoFixNormalIcon from '@mui/icons-material/AutoFixNormal';
+import IconButton from '@mui/material/IconButton';
+import Slider from '../components/Slider';
+
+
 export default function Calligraphy_Page() {
     const { p5InkInstance } = useP5Ink();
     const containerRef = useRef(null);
@@ -21,6 +25,12 @@ export default function Calligraphy_Page() {
     const [showGrid, setShowGrid] = useState(true);
     const [useEraser, setUseEraser] = useState(false);
     const { goToPage } = usePageNavigation();
+ const [strokeMax, setStrokeMax] = useState(12);
+
+
+ useEffect(() => {
+        console.log(strokeMax, 'strokeMax');
+    }, [strokeMax]);
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -29,8 +39,23 @@ export default function Calligraphy_Page() {
     }, [containerRef.current]);
 
     return (
-        <div className='flex flex-col h-full p-8'>
+        <div className='flex flex-col h-full p-8 relative'>
+
+            <div className='absolute left-20'>
+                <IconButton sx={{
+                    color: '#ffffff', // Custom color
+                    '&:hover': {
+                        color: '#ffffff' // Hover color
+                    }
+                }} aria-label="Example" onClick={() => p5InkInstance.current?.clearCanvas()}>
+                    <DeleteIcon fontSize='large' />
+                </IconButton>
+            </div>
+
             <Text type='title'>書法練習</Text>
+
+
+
             <Poetry />
             <div ref={containerRef} className="flex-1 w-full self-center flex justify-center m-6">
                 <GridCanva
@@ -44,24 +69,31 @@ export default function Calligraphy_Page() {
                     canvasHeight={dimensions.height}
                     showGrid={showGrid}
                     isEraser={useEraser}
+                    eraserSize={40}
+                    strokeMax={strokeMax}
                 />
             </div>
-            <div className="canvas-controls flex justify-between mb-6">
+            <div className="canvas-controls flex justify-between gap-12 mb-6">
                 <div className="flex items-center space-x-4">
-                    {/* <Button color='primary' size='lg' onPress={() => p5InkInstance.current?.clearCanvas()}>
-                        <DeleteIcon fontSize='large' /><Text type="heading">清除</Text>
-                    </Button> */}
-                    {/* <Button color='primary' size='lg' onPress={() => p5InkInstance.current?.undoLastStroke()}>
-                        <UndoIcon fontSize='large' /><Text type="heading">回上一筆</Text>
-                    </Button> */}
-                    {/* 橡皮擦切換 */}
+
+                   
                     <IconSwitch
                         Icon={<AutoFixNormalIcon fontSize='large' />}
                         setOn={setUseEraser}
                         isOn={useEraser}
                     >橡皮擦</IconSwitch>
                 </div>
+
+                <Slider min={8} max={30} value={strokeMax} onChange={(e)=>{
+                    setStrokeMax(parseFloat(e.target.value));
+                    // console.log(e)
+                }}/>
+
+
+  <div className="flex items-center space-x-4">
+
                 <IconSwitch Icon={<GridOnIcon fontSize='large' />} setOn={setShowGrid} isOn={showGrid}>格線</IconSwitch>
+            </div>
             </div>
             <Button
                 color='primary'
