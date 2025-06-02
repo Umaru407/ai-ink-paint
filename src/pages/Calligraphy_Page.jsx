@@ -52,7 +52,7 @@ export default function Calligraphy_Page() {
                 </IconButton>
             </div>
 
-            <Text type='title'>書法練習2</Text>
+            <Text type='title'>書法練習</Text>
 
 
 
