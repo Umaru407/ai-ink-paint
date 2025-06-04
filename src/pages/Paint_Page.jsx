@@ -1,19 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelectImageContext } from '../contexts/SelectImageContext';
-import p5 from 'p5';
-import ImageColor from '../components/ImageColor';
+import React, { useEffect, useRef, useState } from "react";
+import { useSelectImageContext } from "../contexts/SelectImageContext";
+import p5 from "p5";
+import ImageColor from "../components/ImageColor";
 
-import { useP5Paint } from '../contexts/p5PaintContext';
-import { usePageNavigation } from '../contexts/PageContext';
-import SignCanvas from '../components/SignCanvas';
-import ColorCanva from '../components/ColorCanva';
-import Text from '../components/Text';
-import Button from '../components/Button';
+import { useP5Paint } from "../contexts/p5PaintContext";
+import { usePageNavigation } from "../contexts/PageContext";
+import SignCanvas from "../components/SignCanvas";
+import ColorCanva from "../components/ColorCanva";
+import Text from "../components/Text";
+import Button from "../components/Button";
 
-import IconSwitch from '../components/IconSwitch';
+import IconSwitch from "../components/IconSwitch";
 
 // type p5ContextType = p5 | null;
-
 
 // 擴展 p5 型別
 // declare module 'p5' {
@@ -23,98 +22,196 @@ import IconSwitch from '../components/IconSwitch';
 //     }
 // }
 
-import { useP5Color } from '../contexts/p5ColorContext';
-
+import { useP5Color } from "../contexts/p5ColorContext";
 
 const colors = [
-    '#9d2933', '#f36838', '#ffb61e', '#40de5a', '#16a951', '#815476',
-    '#ff4777', '#f9906f', '#ae7000', '#789262', '#057748', '#845a33',
-    '#30dff3', '#1685a9', '#003472', '#161823', '#50616d', '#fff2df'
-
+  "#9d2933",
+  "#f36838",
+  "#ffb61e",
+  "#40de5a",
+  "#16a951",
+  "#815476",
+  "#ff4777",
+  "#f9906f",
+  "#ae7000",
+  "#789262",
+  "#057748",
+  "#845a33",
+  "#30dff3",
+  "#1685a9",
+  "#003472",
+  "#161823",
+  "#50616d",
+  "#fff2df",
 ];
 
-const brushSizes = [
-    {
-        size: 20,
-        tag: '小'
-    },
-    {
-        size: 40,
-        tag: '中'
-    },
-    {
-        size: 60,
-        tag: '大'
-    }
-]
+// const brushSizes = [
+//   {
+//     size: 20,
+//     tag: "小",
+//   },
+//   {
+//     size: 40,
+//     tag: "中",
+//   },
+//   {
+//     size: 60,
+//     tag: "大",
+//   },
+// ];
 
+function ColorPalette({ selectedColor,setSelectedColor }) {
+  // 紀錄目前選中的顏色
+//   const [selectedColor, setSelectedColor2] = useState("#9d2933");
 
-function ColorPalette({ setSelectedColor }) {
-    // 紀錄目前選中的顏色
-    const [selectedColor, setSelectedColor2] = useState('#9d2933');
-
-    return (
-        <div className="grid grid-cols-6 gap-4 w-full">
-            {colors.map((color, index) => {
-                // const isSelected = color === selectedColor;
-                return (
-                    <div
-                        key={index}
-                        onClick={() => { setSelectedColor(color); setSelectedColor2(color) }}
+  return (
+    <div className="grid grid-cols-6 gap-x-4 gap-y-8 w-full">
+      {colors.map((color, index) => {
+        // const isSelected = color === selectedColor;
+        return (
+          <div
+            key={index}
+            onClick={() => {
+              setSelectedColor(color);
+            //   setSelectedColor2(color);
+            }}
             //             className={`
             //   aspect-square rounded cursor-pointer hover:opacity-80
             //   ${isSelected ? 'border-4 border-white' : 'border-2 border-transparent'}
             // `}
 
             className={`aspect-square rounded-lg border-2 transition-all hover:scale-110 ${
-                      selectedColor === color 
-                        ? 'border-white shadow-lg ring-2 ring-blue-400' 
-                        : 'border-gray-600 hover:border-gray-400'
-                    }`}
-    
-
-                        style={{ backgroundColor: color }}
-                    />
-                );
-            })}
-        </div>
-    );
+              selectedColor === color
+                ? "border-white shadow-lg ring-2 ring-blue-400"
+                : "border-gray-600 hover:border-gray-400"
+            }`}
+            style={{ backgroundColor: color }}
+          />
+        );
+      })}
+    </div>
+  );
 }
 
+function BrushSizeSelector({ brushSize, setBrushSize ,selectedColor }) {
+  useEffect(() => {
+    console.log(brushSize, "brushSize");
+  }, [brushSize]);
+
+  const handleBrushSizeChange = (e) => {
+    setBrushSize(parseInt(e.target.value));
+    // console.log( 'brushSize', brushSize)
+  };
+
+  const adjustBrushSize = (delta) => {
+    const newSize = Math.max(1, Math.min(5, brushSize + delta));
+    setBrushSize(newSize);
+  };
+
+  const percent = ((brushSize- 1) / (5 - 1)) * 100;
+    const thumbSize = 20 + (percent / 100) * 30; // 12px 到 32px
+  return (
+   
+      <div className="flex-1">
+        <div className="flex items-center justify-between mb-2">
+          
+          <span className="text-blue-400 font-bold text-2xl">
+            大小 {brushSize}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => adjustBrushSize(-1)}
+            className="p-1.5 bg-gray-700 hover:bg-gray-600 rounded transition-colors"
+          >
+           
+          </button>
+
+          <div className="flex-1 relative">
 
 
-function BrushSizeSlector({ selectedColor, setBrushSize }) {
-    return (
-        <div className='flex-1 flex flex-col gap-12 justify-center items-center' >
-            {
-                brushSizes.map((size, index) => (
-                    <div key={index}
-                        className='flex items-center justify-center w-16 h-16'
-                        onClick={() => {
-                            setBrushSize(size.size)
+
+          <div className="w-full py-6">
+                <div className="relative">
+                    {/* 滑軌 */}
+                    <div className="w-full h-2 bg-gray-300 rounded-full"
+                    style={{
+                        
+                        background: `linear-gradient(to right, ${selectedColor} 0%, ${selectedColor} ${(brushSize-1)*25}%, #374151 ${(brushSize-1)*25}%, #374151 100%)`
+                        // backgroundColor: , // 使用選中的顏色
+                    }}
+                    ></div>
+
+                    {/* 動態圓形 */}
+                    <div
+                        className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 rounded-full"
+                        style={{
+                            left: `${percent}%`,
+                            width: `${thumbSize}px`,
+                            height: `${thumbSize}px`,
+                            transition: 'width 0.1s ease, height 0.1s ease',
+                            backgroundColor: selectedColor, // 使用選中的顏色
                         }}
-                    >
-                        <div className='rounded-full flex items-center justify-center border-2 border-white' style={{ backgroundColor: selectedColor, width: `${size.size}px`, height: `${size.size}px` }}
-                        >{size.tag}</div>
-                    </div>
-                ))
-            }
-        </div>
-    )
-}
+                    />
 
+                    {/* 滑塊輸入 */}
+                    <input
+                        type="range"
+                        min={1}
+                        max={5}
+                        value={brushSize}
+                        onChange={handleBrushSizeChange}
+                        className="absolute inset-0 w-full opacity-0 cursor-pointer"
+                    />
+                </div>
+            </div>
+
+
+          </div>
+
+          <button
+            onClick={() => adjustBrushSize(1)}
+            className="p-1.5 bg-gray-700 hover:bg-gray-600 rounded transition-colors"
+          >
+          </button>
+        </div>
+
+        {/* 快速大小選擇 */}
+        <div className="flex gap-1.5 mt-2">
+          {[1, 2, 3, 4, 5].map((size) => (
+            <button
+              key={size}
+              onClick={() => setBrushSize(size)}
+              className={`w-8 h-8 rounded-lg text-lg transition-all flex items-center justify-center ${
+                brushSize === size
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-700 hover:bg-gray-600 text-gray-300"
+              }`}
+            >
+              {size}
+            </button>
+          ))}
+        </div>
+      </div>
+
+  );
+}
 
 function DoneButton() {
-    const { p5ColorInstance } = useP5Color()
-    const { goToPage } = usePageNavigation();
-    return (
-        <Button fullWidth onPress={() => {
-            p5ColorInstance.current?.saveCanvasToBuffer()
-            goToPage(1)
-        }}>
-            <Text type="heading" >上色完成</Text>
-        </Button>
-    )
+  const { p5ColorInstance } = useP5Color();
+  const { goToPage } = usePageNavigation();
+  return (
+    <Button
+      fullWidth
+      onPress={() => {
+        p5ColorInstance.current?.saveCanvasToBuffer();
+        goToPage(1);
+      }}
+    >
+      <Text type="heading">上色完成</Text>
+    </Button>
+  );
 }
 
 // interface Stroke {
@@ -124,65 +221,88 @@ function DoneButton() {
 // }
 
 export default function PaintPage() {
-    const ColorContainer = useRef(null);
-    const [colorDimensions, setColorDimensions] = useState({ width: 0, height: 0 });
 
-    useEffect(() => {
-        if (!ColorContainer.current) return;
-        //get the height of the color container
-        const height = ColorContainer.current.offsetHeight;
-        //get the width of the color container
-        const width = ColorContainer.current.offsetWidth;
 
-        console.log(width, height, 'width, height')
+  const ColorContainer = useRef(null);
+  const [colorDimensions, setColorDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
 
-        setColorDimensions({ width, height });
-    }, [ColorContainer.current?.offsetHeight]);
+  useEffect(() => {
+    if (!ColorContainer.current) return;
+    //get the height of the color container
+    const height = ColorContainer.current.offsetHeight;
+    //get the width of the color container
+    const width = ColorContainer.current.offsetWidth;
 
-    // const { selectImage } = useSelectImageContext();
-    const [sharedGraphics, setSharedGraphics] = useState(null); // 共享畫布數據
-    const [sharedColorGraphics, setSharedColorGraphics] = useState(null); // 共享畫布數據
-    const [selectedColor, setSelectedColor] = useState(colors[0]);
-    const [brushSize, setBrushSize] = useState(20);
-    const [editMode, setEditMode] = useState(false)
-    return (
-        <div className="paper-container flex flex-col h-full  p-8">
-            <div className='px-8 flex flex-col flex-1'>
-                <div className='flex gap-6 flex-1 justify-center' >
-                    <div className='h-full flex flex-col  '>
-                        <Text type="title">上色</Text>
-                        <div ref={ColorContainer} className='flex-1'>
-                            <ColorCanva maxCanvasHeight={colorDimensions.height} setSharedColorGraphics={setSharedColorGraphics} selectedColor={selectedColor} brushSize={brushSize} editMode={editMode} setEditMode={setEditMode} />
-                            <ImageColor maxCanvasHeight={colorDimensions.height} editMode={editMode} setEditMode={setEditMode} sharedColorGraphics={sharedColorGraphics} setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} selectedColor={selectedColor} brushSize={brushSize} />
-                        </div>
-                    </div>
+    // console.log(width, height, "width, height");
 
-                    {/* <div>
+    setColorDimensions({ width, height });
+  }, [ColorContainer.current?.offsetHeight]);
+
+  // const { selectImage } = useSelectImageContext();
+  const [sharedGraphics, setSharedGraphics] = useState(null); // 共享畫布數據
+  const [sharedColorGraphics, setSharedColorGraphics] = useState(null); // 共享畫布數據
+  const [selectedColor, setSelectedColor] = useState(colors[0]);
+  const [brushSize, setBrushSize] = useState(2);
+  const [editMode, setEditMode] = useState(false);
+  return (
+    <div className="paper-container flex flex-col h-full  p-8">
+      <div className="px-8 flex flex-col flex-1">
+        <div className="flex gap-6 flex-1 justify-center">
+          <div className="h-full flex flex-col  ">
+            <Text type="title">上色</Text>
+            <div ref={ColorContainer} className="flex-1">
+              <ColorCanva
+                maxCanvasHeight={colorDimensions.height}
+                setSharedColorGraphics={setSharedColorGraphics}
+                selectedColor={selectedColor}
+                brushSize={brushSize}
+                editMode={editMode}
+                setEditMode={setEditMode}
+              />
+              <ImageColor
+                maxCanvasHeight={colorDimensions.height}
+                editMode={editMode}
+                setEditMode={setEditMode}
+                sharedColorGraphics={sharedColorGraphics}
+                setSharedGraphics={setSharedGraphics}
+                sharedGraphics={sharedGraphics}
+                selectedColor={selectedColor}
+                brushSize={brushSize}
+              />
+            </div>
+          </div>
+
+          {/* <div>
                         <Text type="title">落款</Text>
                         <SignCanvas setSharedGraphics={setSharedGraphics} sharedGraphics={sharedGraphics} editMode={editMode} setEditMode={setEditMode} />
                     </div> */}
-                </div>
-
-
-
-
-                <div className='mx-6 my-6 flex gap-12'>
-
-                    <div className='flex flex-col'>
-                        <Text type="subtitle">筆刷</Text>
-                        <BrushSizeSlector selectedColor={selectedColor} setBrushSize={setBrushSize} />
-                    </div>
-                    <div className='flex flex-col flex-1'>
-                        <Text type="subtitle">顏彩</Text>
-                        <ColorPalette setSelectedColor={setSelectedColor} selectedColor={selectedColor} />
-                    </div>
-                </div>
-
-            </div>
-
-            <div className="px-8 shrink">
-                <DoneButton />
-            </div>
         </div>
-    );
+
+        <div className="mx-6 my-8 flex gap-12">
+          <div className="flex flex-col flex-2">
+            <Text type="subtitle">筆刷</Text>
+            <BrushSizeSelector
+              brushSize={brushSize}
+              setBrushSize={setBrushSize}
+              selectedColor={selectedColor}
+            />
+          </div>
+          <div className="flex flex-col flex-1">
+            <Text type="subtitle">顏彩</Text>
+            <ColorPalette
+              setSelectedColor={setSelectedColor}
+              selectedColor={selectedColor}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="px-8 shrink">
+        <DoneButton />
+      </div>
+    </div>
+  );
 }

@@ -16,8 +16,7 @@ import { useSelectPoetryContext } from '../contexts/SelectPoetryContext';
 export default function Select_Paint_Page() {
     const { prompt, setPrompt, images, setImages } = useImageContext();
     const { selectPoetry } = useSelectPoetryContext();
-    // console.log(prompt, '@@@@@@@@@')
-    // const { paintImageData } = useP5Paint()
+    
     return (
         <div className="paper-container flex flex-col p-8 h-full">
             <div className='left-20 w-4 h-4 border border-white rounded-full opacity-60 absolute'
@@ -35,7 +34,7 @@ export default function Select_Paint_Page() {
 
                     // 4. 拼成路径
                     const imageList = selected.map(n => `/sample/${selectPoetry.title}/${n}.png`)
-                    console.log(imageList)
+                    // console.log(imageList)
                     setImages(imageList)
                 }
                 }

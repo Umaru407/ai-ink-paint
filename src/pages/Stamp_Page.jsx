@@ -68,7 +68,6 @@ export default function StampPage() {
         const height = ColorContainer.current.offsetHeight;
         //get the width of the color container
         const width = ColorContainer.current.offsetWidth;
-
         setColorDimensions({ width, height });
     }, [ColorContainer.current?.offsetHeight]);
 

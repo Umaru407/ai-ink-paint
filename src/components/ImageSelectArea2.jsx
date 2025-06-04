@@ -38,7 +38,7 @@ const ImageSelectArea = () => {
                             onClick={() => {
                                 setSelectImage(images[index])
                                 goToPage(1)
-                                console.log(images[index], 'image')
+                                // console.log(images[index], 'image')
                             }}
                         />
                     ) : (

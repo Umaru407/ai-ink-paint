@@ -32,7 +32,7 @@ const PoetryList = ({ setPrompt }) => {
                         {TANG_POEMS.map((poem) => (
                             <button
                                 key={poem.id}
-                                className={`w-full text-left p-2 hover:bg-gray-100 ${selectPoetry.id === poem.id ? 'bg-blue-100' : ''
+                                className={`w-full text-left p-2  ${selectPoetry.id === poem.id ? 'bg-blue-100' : ''
                                     }`}
                                 onClick={() => {
                                     setSelectPoetry(poem)

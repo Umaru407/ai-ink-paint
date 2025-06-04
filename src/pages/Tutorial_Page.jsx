@@ -85,12 +85,12 @@ const TutorialPage = () => {
                                     {tutorial.intro}
                                 </Text> */}
  
-                                <div className='w-fit p-4 m-4 flex flex-col items-center justify-center bg-stone-600 rounded-lg'>
+                                <div className=' p-4 m-4 flex w-fit h-full justify-center bg-stone-600 rounded-lg'>
 
                                     <img
                                         src={tutorial.image}
                                         alt={`教學 ${index + 1}`}
-                                        className='w-11/12 h-fit object-contain rounded-lg'
+                                        className='w-11/12 object-fill rounded-lg'
                                     />
 
                                      
