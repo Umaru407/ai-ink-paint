@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Getting Started with Create React App。（瀏覽器最佳解析度900x1600）
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
