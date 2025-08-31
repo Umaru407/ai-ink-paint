@@ -70,21 +70,21 @@ export default function Complete_Page() {
   const { paintImageData, p5PaintInstance } = useP5Paint()
   const [isUploading, setIsUploading] = useState(false); // Add this line
 
-  const uploadPDFToServer = async (pdfDataUri) => {
-    const base64 = pdfDataUri.split(',')[1];
-    const blob = await (await fetch(pdfDataUri)).blob();
+  // const uploadPDFToServer = async (pdfDataUri) => {
+  //   const base64 = pdfDataUri.split(',')[1];
+  //   const blob = await (await fetch(pdfDataUri)).blob();
 
-    const formData = new FormData();
-    formData.append('file', blob, 'image.pdf');
+  //   const formData = new FormData();
+  //   formData.append('file', blob, 'image.pdf');
 
-    await fetch('http://localhost:3001/upload', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => alert('上傳成功！File ID: ' + data.fileId))
-      .catch((err) => console.error('Upload error', err));
-  };
+  //   await fetch('http://localhost:3001/upload', {
+  //     method: 'POST',
+  //     body: formData,
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => alert('上傳成功！File ID: ' + data.fileId))
+  //     .catch((err) => console.error('Upload error', err));
+  // };
 
 
   const printBase64Image = (base64Image) => {
